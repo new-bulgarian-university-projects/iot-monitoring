@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.Models", "IoTMon.Models\IoTMon.Models.csproj", "{017AB222-CF86-4C54-9730-D989F2B84498}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.Data", "IoTMon.Data\IoTMon.Data.csproj", "{06D3CE1B-4EBF-43DE-A732-9AEDDD9F343C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{017AB222-CF86-4C54-9730-D989F2B84498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017AB222-CF86-4C54-9730-D989F2B84498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017AB222-CF86-4C54-9730-D989F2B84498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017AB222-CF86-4C54-9730-D989F2B84498}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06D3CE1B-4EBF-43DE-A732-9AEDDD9F343C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06D3CE1B-4EBF-43DE-A732-9AEDDD9F343C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06D3CE1B-4EBF-43DE-A732-9AEDDD9F343C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06D3CE1B-4EBF-43DE-A732-9AEDDD9F343C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0FE0E99-894F-4677-A390-1360D791BF2A}
+	EndGlobalSection
+EndGlobal
