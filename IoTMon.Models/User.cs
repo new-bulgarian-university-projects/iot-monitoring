@@ -7,8 +7,21 @@ namespace IoTMon.Models
 {
     public class User
     {
+        private ICollection<Device> devices;
+
+        public User()
+        {
+            this.devices = new HashSet<Device>();
+        }
+
         [Key]
         public Guid Id { get; set; }
+
+        public ICollection<Device> Devices
+        {
+            get => this.devices;
+            set => this.devices = value;
+        }
 
         [EmailAddress]
         [Required]

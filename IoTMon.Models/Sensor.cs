@@ -15,6 +15,5 @@ namespace IoTMon.Models
         public string Label { get; set; }
 
         public ValueType ValueType { get; set; }
-
     }
 }
