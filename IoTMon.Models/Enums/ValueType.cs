@@ -1,4 +1,4 @@
-﻿namespace IoTMon.Data.Enums
+﻿namespace IoTMon.Models.Enums
 {
     public enum ValueType
     {
