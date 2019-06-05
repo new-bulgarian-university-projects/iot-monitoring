@@ -10,9 +10,11 @@ namespace IoTMon.Models
         [Key]
         public Guid Id { get; set; }
 
-        public string ShortName { get; set; }
-
         public string Label { get; set; }
+
+        public string FriendlyLabel { get; set; }
+
+        public string MeasurementUnit { get; set; }
 
         public ValueType ValueType { get; set; }
     }
