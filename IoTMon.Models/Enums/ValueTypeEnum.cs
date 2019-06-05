@@ -1,6 +1,6 @@
 ﻿namespace IoTMon.Models.Enums
 {
-    public enum ValueType
+    public enum ValueTypeEnum
     {
         String,
         Boolean,

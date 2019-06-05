@@ -1,4 +1,5 @@
 ﻿using IoTMon.Models;
+using IoTMon.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,13 +25,13 @@ namespace IoTMon.Data
                 .Property(s => s.ValueType)
                 .HasConversion(
                     v => v.ToString(),
-                    v => (ValueType)Enum.Parse(typeof(ValueType), v));
+                    v => (ValueTypeEnum)Enum.Parse(typeof(ValueTypeEnum), v));
 
             modelBuilder.Entity<Alert>()
                 .Property(a => a.ValueType)
                 .HasConversion(
                     v => v.ToString(),
-                    v => (ValueType)Enum.Parse(typeof(ValueType), v));
+                    v => (ValueTypeEnum)Enum.Parse(typeof(ValueTypeEnum), v));
 
             // uniques
             modelBuilder.Entity<User>()

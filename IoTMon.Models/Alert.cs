@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IoTMon.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,7 +21,7 @@ namespace IoTMon.Models
         public DateTime AlertStarted { get; set; }
         public DateTime? AlertClosed { get; set; }
 
-        public ValueType ValueType { get; set; }
+        public ValueTypeEnum ValueType { get; set; }
         public string TriggeringValue { get; set; }
     }
 }
