@@ -20,6 +20,18 @@ namespace IoTMon.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // many to many
+            modelBuilder.Entity<DeviceSensor>()
+                .HasKey(m => new { m.DeviceId, m.SensorId });
+            modelBuilder.Entity<DeviceSensor>()
+                .HasOne(ds => ds.Device)
+                .WithMany(d => d.DeviceSensors)
+                .HasForeignKey(d => d.DeviceId);
+            modelBuilder.Entity<DeviceSensor>()
+                .HasOne(ds => ds.Sensor)
+                .WithMany(s => s.DeviceSensors)
+                .HasForeignKey(s => s.SensorId);
+
             // enum type to string
             modelBuilder.Entity<Sensor>()
                 .Property(s => s.ValueType)
@@ -41,6 +53,8 @@ namespace IoTMon.Data
             modelBuilder.Entity<Sensor>()
                 .HasIndex(s => s.Label)
                 .IsUnique();
+
+            modelBuilder.SeedDevicesAndSensors();
 
             base.OnModelCreating(modelBuilder);
         }

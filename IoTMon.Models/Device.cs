@@ -8,20 +8,20 @@ namespace IoTMon.Models
     public class Device
     {
 
-        private ICollection<Sensor> sensors;
+        private ICollection<DeviceSensor> deviceSensors;
         public Device()
         {
-            this.sensors = new HashSet<Sensor>();
+            this.deviceSensors = new HashSet<DeviceSensor>();
         }
 
         [Key]
         public Guid Id { get; set; }
-        public string DeviceId { get; set; }
+        public string DeviceName { get; set; }
 
-        public ICollection<Sensor> Sensors
+        public ICollection<DeviceSensor> DeviceSensors
         {
-            get => this.sensors;
-            set => this.sensors = value;
+            get => this.deviceSensors;
+            set => this.deviceSensors = value;
         }
 
         public bool IsActivated { get; set; }
