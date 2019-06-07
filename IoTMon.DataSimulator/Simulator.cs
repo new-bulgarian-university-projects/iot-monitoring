@@ -1,4 +1,7 @@
 ﻿using IoTMon.Data;
+using IoTMon.DataServices;
+using IoTMon.DataServices.Contracts;
+using IoTMon.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +11,7 @@ using System.IO;
 
 namespace IoTMon.DataSimulator
 {
-    // read devices from sql srv
+    // DONE read devices from sql srv 
     // built devices/sensors from the db
     // iterate over sensors and set timer and work
     // generate random value of that type
@@ -20,12 +23,16 @@ namespace IoTMon.DataSimulator
     {
         private static IServiceProvider serviceProvider;
         private static IConfiguration Configuration;
-        
+        private static IDeviceService deviceService;
+
         static void Main(string[] args)
         {
             Configure();
             RegisterServices();
 
+            deviceService = serviceProvider.GetService<DeviceService>();
+
+            var devices = deviceService.GetDevices();
 
 
             DisposeServices();
@@ -38,6 +45,7 @@ namespace IoTMon.DataSimulator
             services.AddDbContext<ApplicationDbContext>(options =>
                           options.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring")));
 
+            services.AddTransient<DeviceService>();
 
 
             serviceProvider = services.BuildServiceProvider();
@@ -53,7 +61,7 @@ namespace IoTMon.DataSimulator
                   .AddJsonFile(fileProvider, "appsettings.json", false, true)
                   .Build();
         }
-        
+
         private static void DisposeServices()
         {
             if (serviceProvider == null)
