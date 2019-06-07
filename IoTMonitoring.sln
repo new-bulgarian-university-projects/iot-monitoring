@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.Models", "IoTMon.Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.Data", "IoTMon.Data\IoTMon.Data.csproj", "{06D3CE1B-4EBF-43DE-A732-9AEDDD9F343C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.WebApi", "IoTMon.WebApi\IoTMon.WebApi.csproj", "{068AAD43-C21E-40EB-A9E0-9B757A5FA3BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.WebApi", "IoTMon.WebApi\IoTMon.WebApi.csproj", "{068AAD43-C21E-40EB-A9E0-9B757A5FA3BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.DataSimulator", "IoTMon.DataSimulator\IoTMon.DataSimulator.csproj", "{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.Services", "IoTMon.Services\IoTMon.Services.csproj", "{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.DataServices", "IoTMon.DataServices\IoTMon.DataServices.csproj", "{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{068AAD43-C21E-40EB-A9E0-9B757A5FA3BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{068AAD43-C21E-40EB-A9E0-9B757A5FA3BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{068AAD43-C21E-40EB-A9E0-9B757A5FA3BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
