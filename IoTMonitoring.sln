@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.102
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.Models", "IoTMon.Models\IoTMon.Models.csproj", "{017AB222-CF86-4C54-9730-D989F2B84498}"
 EndProject
@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.Data", "IoTMon.Data\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.WebApi", "IoTMon.WebApi\IoTMon.WebApi.csproj", "{068AAD43-C21E-40EB-A9E0-9B757A5FA3BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.DataSimulator", "IoTMon.DataSimulator\IoTMon.DataSimulator.csproj", "{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.DataSimulator", "IoTMon.DataSimulator\IoTMon.DataSimulator.csproj", "{E12F61E5-BF03-4C30-AA1C-DC939EA3EBD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.Services", "IoTMon.Services\IoTMon.Services.csproj", "{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.Services", "IoTMon.Services\IoTMon.Services.csproj", "{ED4A12E8-C52C-4D3E-B17D-C96512B8AEAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.DataServices", "IoTMon.DataServices\IoTMon.DataServices.csproj", "{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTMon.DataServices", "IoTMon.DataServices\IoTMon.DataServices.csproj", "{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMon.IngestionWorker", "IoTMon.IngestionWorker\IoTMon.IngestionWorker.csproj", "{A8A02C7F-C22C-4CB9-850F-5CB188E1206F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58F0B044-3FE0-4B42-8DF6-86E257D07DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A02C7F-C22C-4CB9-850F-5CB188E1206F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A02C7F-C22C-4CB9-850F-5CB188E1206F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A02C7F-C22C-4CB9-850F-5CB188E1206F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A02C7F-C22C-4CB9-850F-5CB188E1206F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
@@ -16,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IoTMon.DataServices\IoTMon.DataServices.csproj" />
-    <ProjectReference Include="..\IoTMon.Data\IoTMon.Data.csproj" />
     <ProjectReference Include="..\IoTMon.Services\IoTMon.Services.csproj" />
   </ItemGroup>
 

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using RabbitMQ.Client;
 using System;
 using System.IO;
 using System.Threading;
@@ -19,7 +20,7 @@ namespace IoTMon.DataSimulator
     // DONE built devices/sensors from the db
     // rabbitMQ connection
     // iterate over sensors and set timer and work
-    
+
     // send message in format:
     // timestamp | device_id | sensor | value
 
@@ -31,6 +32,9 @@ namespace IoTMon.DataSimulator
         private static IDeviceService deviceService;
         private static ISimulatorHelpers helpers;
 
+        private static IModel channel;
+        private static RabbitMQConfig rabbitMQConfig;
+
         static void Main(string[] args)
         {
             Configure();
@@ -38,19 +42,37 @@ namespace IoTMon.DataSimulator
 
             deviceService = serviceProvider.GetService<IDeviceService>();
             helpers = serviceProvider.GetService<ISimulatorHelpers>();
+            
+
+            if (rabbitMQConfig == null)
+            {
+                throw new ArgumentNullException("RabbitMQ");
+            }
 
             var devices = deviceService.GetDevices();
 
-            foreach (var device in devices)
+            var factory = new ConnectionFactory()
             {
-                foreach (var sensor in device.Sensors)
-                {
-                    TimerState state = new TimerState(device, sensor);
-                    var timer = new Timer(Execute, state, 0, device.IntervalInSeconds * 1000);
-                }
-            }
+                HostName = rabbitMQConfig.HostName,
+                UserName = rabbitMQConfig.UserName,
+                Password = rabbitMQConfig.Password
+            };
 
-            Console.ReadLine();
+            using (var connection = factory.CreateConnection())
+            using (channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(rabbitMQConfig.QueueName, true, false, false, null);
+
+                foreach (var device in devices)
+                {
+                    foreach (var sensor in device.Sensors)
+                    {
+                        TimerState state = new TimerState(device, sensor);
+                        var timer = new Timer(Execute, state, 0, device.IntervalInSeconds * 1000);
+                    }
+                }
+                Console.ReadLine();
+            }
             DisposeServices();
         }
 
@@ -68,19 +90,28 @@ namespace IoTMon.DataSimulator
 
             };
 
-            Console.WriteLine(message);
+            var body = Utils.Serialize(message);
+
+            channel.BasicPublish(exchange: "",
+                                 routingKey: rabbitMQConfig.QueueName,
+                                 basicProperties: null,
+                                 body: body);
+
+            Console.WriteLine(" [x] Sent {0}", message);
+
         }
 
         private static void RegisterServices()
         {
             var services = new ServiceCollection();
-
             services.AddDbContext<ApplicationDbContext>(options =>
                           options.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring")));
 
             services.AddTransient<IDeviceService, DeviceService>();
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
+            services.AddSingleton<Utils>();
 
+            rabbitMQConfig = Configuration.GetSection("RabbitMQ").Get<RabbitMQConfig>();
 
             serviceProvider = services.BuildServiceProvider();
         }
