@@ -29,7 +29,7 @@ namespace IoTMon.DataServices
             {
                 query = query.Where(d => d.IsActivated == false);
             }
-            else
+            else if(status == StatusEnum.Activated)
             {
                 query = query.Where(d => d.IsActivated == true);
             }
@@ -39,7 +39,7 @@ namespace IoTMon.DataServices
             {
                 query = query.Where(d => d.IsPublic == false);
             }
-            else
+            else if(scope == ScopeEnum.Public)
             {
                 query = query.Where(d => d.IsPublic == true);
             }

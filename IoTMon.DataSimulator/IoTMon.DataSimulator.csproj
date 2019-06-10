@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IoTMon.DataServices\IoTMon.DataServices.csproj" />
     <ProjectReference Include="..\IoTMon.Data\IoTMon.Data.csproj" />
+    <ProjectReference Include="..\IoTMon.Services\IoTMon.Services.csproj" />
   </ItemGroup>
 
 </Project>

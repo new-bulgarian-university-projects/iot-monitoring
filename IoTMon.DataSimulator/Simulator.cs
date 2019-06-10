@@ -1,21 +1,25 @@
 ﻿using IoTMon.Data;
 using IoTMon.DataServices;
 using IoTMon.DataServices.Contracts;
+using IoTMon.Models.AMQP;
 using IoTMon.Models.Enums;
+using IoTMon.Services;
+using IoTMon.Services.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace IoTMon.DataSimulator
 {
     // DONE read devices from sql srv 
-    // built devices/sensors from the db
-    // iterate over sensors and set timer and work
-    // generate random value of that type
+    // DONE built devices/sensors from the db
     // rabbitMQ connection
+    // iterate over sensors and set timer and work
+    
     // send message in format:
     // timestamp | device_id | sensor | value
 
@@ -23,19 +27,48 @@ namespace IoTMon.DataSimulator
     {
         private static IServiceProvider serviceProvider;
         private static IConfiguration Configuration;
+
         private static IDeviceService deviceService;
+        private static ISimulatorHelpers helpers;
 
         static void Main(string[] args)
         {
             Configure();
             RegisterServices();
 
-            deviceService = serviceProvider.GetService<DeviceService>();
+            deviceService = serviceProvider.GetService<IDeviceService>();
+            helpers = serviceProvider.GetService<ISimulatorHelpers>();
 
             var devices = deviceService.GetDevices();
 
+            foreach (var device in devices)
+            {
+                foreach (var sensor in device.Sensors)
+                {
+                    TimerState state = new TimerState(device, sensor);
+                    var timer = new Timer(Execute, state, 0, device.IntervalInSeconds * 1000);
+                }
+            }
 
+            Console.ReadLine();
             DisposeServices();
+        }
+
+        private static void Execute(object objectState)
+        {
+            TimerState state = (TimerState)objectState;
+
+            var message = new Message()
+            {
+                Timestamp = helpers.GetDatetimeUTC(),
+                DeviceId = state.Device.Id,
+                SensorLabel = state.Sensor.Label,
+                Value = helpers.GetRandomNumber(state.Sensor.Label),
+                ValueType = state.Sensor.ValueType.ToString()
+
+            };
+
+            Console.WriteLine(message);
         }
 
         private static void RegisterServices()
@@ -45,7 +78,8 @@ namespace IoTMon.DataSimulator
             services.AddDbContext<ApplicationDbContext>(options =>
                           options.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring")));
 
-            services.AddTransient<DeviceService>();
+            services.AddTransient<IDeviceService, DeviceService>();
+            services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
 
 
             serviceProvider = services.BuildServiceProvider();
@@ -70,6 +104,7 @@ namespace IoTMon.DataSimulator
             }
             if (serviceProvider is IDisposable)
             {
+                Console.WriteLine("Disposing ... ");
                 ((IDisposable)serviceProvider).Dispose();
             }
         }
