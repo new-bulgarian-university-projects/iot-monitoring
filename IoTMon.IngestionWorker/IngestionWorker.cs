@@ -16,15 +16,17 @@ namespace IoTMon.IngestionWorker
 {
     class IngestionWorker
     {
-        // listen rabbitmq 
-        // receive message
-        // parse it
+        // DONE listen rabbitmq 
+        // DONE receive message
+        // DONE parse it
         // open influxdb connection
         // write the point
 
         private static IServiceProvider serviceProvider;
         private static IConfiguration Configuration;
         private static RabbitMQConfig rabbitMQConfig;
+
+        private static ushort UnackedMessagesPerConsumer = 15;
 
         static void Main(string[] args)
         {
@@ -41,7 +43,7 @@ namespace IoTMon.IngestionWorker
             using (var channel = connection.CreateModel())
             {
                 channel.QueueDeclare(rabbitMQConfig.QueueName, true, false, false, null);
-                channel.BasicQos(0, 2, false);
+                channel.BasicQos(0, UnackedMessagesPerConsumer, false);
 
                 var consumer = new EventingBasicConsumer(channel);
 

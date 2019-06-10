@@ -11,19 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using RabbitMQ.Client;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
 namespace IoTMon.DataSimulator
 {
-    // DONE read devices from sql srv 
-    // DONE built devices/sensors from the db
-    // rabbitMQ connection
-    // iterate over sensors and set timer and work
-
-    // send message in format:
-    // timestamp | device_id | sensor | value
-
     class Simulator
     {
         private static IServiceProvider serviceProvider;
@@ -34,6 +27,7 @@ namespace IoTMon.DataSimulator
 
         private static IModel channel;
         private static RabbitMQConfig rabbitMQConfig;
+        private static List<Timer> timers = new List<Timer>();
 
         static void Main(string[] args)
         {
@@ -42,7 +36,7 @@ namespace IoTMon.DataSimulator
 
             deviceService = serviceProvider.GetService<IDeviceService>();
             helpers = serviceProvider.GetService<ISimulatorHelpers>();
-            
+
 
             if (rabbitMQConfig == null)
             {
@@ -69,6 +63,8 @@ namespace IoTMon.DataSimulator
                     {
                         TimerState state = new TimerState(device, sensor);
                         var timer = new Timer(Execute, state, 0, device.IntervalInSeconds * 1000);
+
+                        timers.Add(timer);
                     }
                 }
                 Console.ReadLine();
@@ -98,7 +94,6 @@ namespace IoTMon.DataSimulator
                                  body: body);
 
             Console.WriteLine(" [x] Sent {0}", message);
-
         }
 
         private static void RegisterServices()
