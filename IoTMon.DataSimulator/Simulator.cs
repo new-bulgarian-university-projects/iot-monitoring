@@ -31,7 +31,7 @@ namespace IoTMon.DataSimulator
 
         static void Main(string[] args)
         {
-            Configure();
+            Configuration = Utils.Configure();
             RegisterServices();
 
             deviceService = serviceProvider.GetService<IDeviceService>();
@@ -104,22 +104,11 @@ namespace IoTMon.DataSimulator
 
             services.AddTransient<IDeviceService, DeviceService>();
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
-            services.AddSingleton<Utils>();
+            
 
             rabbitMQConfig = Configuration.GetSection("RabbitMQ").Get<RabbitMQConfig>();
 
             serviceProvider = services.BuildServiceProvider();
-        }
-
-        private static void Configure()
-        {
-            var relativePath = @"../../../../IoTMon.WebApi";
-            var absolutePath = Path.GetFullPath(relativePath);
-            var fileProvider = new PhysicalFileProvider(absolutePath);
-
-            Configuration = new ConfigurationBuilder()
-                  .AddJsonFile(fileProvider, "appsettings.json", false, true)
-                  .Build();
         }
 
         private static void DisposeServices()

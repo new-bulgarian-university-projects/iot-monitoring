@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="InfluxData.Net" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IoTMon.Data\IoTMon.Data.csproj" />
+    <ProjectReference Include="..\IoTMon.Services\IoTMon.Services.csproj" />
   </ItemGroup>
 
 </Project>

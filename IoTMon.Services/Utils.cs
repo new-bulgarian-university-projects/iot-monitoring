@@ -8,7 +8,7 @@ using System.Text;
 
 namespace IoTMon.Services
 {
-    public class Utils
+    public static class Utils
     {
         public static byte[] Serialize(object data)
         {
@@ -34,9 +34,8 @@ namespace IoTMon.Services
             return deserialized;
         }
 
-        public static IConfiguration SetConfiguration()
+        public static IConfiguration Configure(string relativePath = @"../../../../IoTMon.WebApi")
         {
-            var relativePath = @"../../../../IoTMon.WebApi";
             var absolutePath = Path.GetFullPath(relativePath);
             var fileProvider = new PhysicalFileProvider(absolutePath);
 
