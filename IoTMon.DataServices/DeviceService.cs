@@ -12,11 +12,11 @@ using System.Text;
 
 namespace IoTMon.DataServices
 {
-    public class DeviceDataService : IDeviceDataService
+    public class DeviceService : IDeviceService
     {
         private readonly ApplicationDbContext dbContext;
 
-        public DeviceDataService(ApplicationDbContext dbContext)
+        public DeviceService(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
         }
