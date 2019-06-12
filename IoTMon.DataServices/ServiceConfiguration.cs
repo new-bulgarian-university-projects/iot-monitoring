@@ -11,9 +11,8 @@ namespace IoTMon.DataServices
 {
     public static class ServiceConfiguration
     {
-        public static void AddDataServices(this IServiceCollection services)
+        public static void AddDataServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var configuration = Utils.Configure();
             var influxDbConfig = configuration.GetSection("InfluxDb").Get<InfluxDbConfig>();
 
             services.AddSingleton<ITimeSeriesProvider>(ts => new InfluxDbProvider(influxDbConfig));

@@ -8,7 +8,8 @@ namespace IoTMon.DataServices.Contracts
 {
     public interface ITimeSeriesProvider
     {
-        Task WriteAsync(Measurement data);
-        Task WriteAsync(IEnumerable<Measurement> data);
+        Task WriteAsync(PointMeasure data);
+        Task WriteAsync(IEnumerable<PointMeasure> data);
+        Task<IEnumerable<Models.AMQP.Message>> QueryAsync(Guid deviceId, string sensor);
     }
 }

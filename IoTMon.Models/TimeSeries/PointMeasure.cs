@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IoTMon.Models.TimeSeries
 {
-    public class Measurement
+    public class PointMeasure
     {
         public string MeasurementName { get; set; }
         public IDictionary<string, object> Tags { get; set; }

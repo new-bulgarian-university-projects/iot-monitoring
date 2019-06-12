@@ -1,12 +1,14 @@
 ﻿using InfluxData.Net.Common.Enums;
 using InfluxData.Net.InfluxDb;
 using InfluxData.Net.InfluxDb.Models;
-using IoTMon.DataServices.Contracts;
 using IoTMon.Models.TimeSeries;
+using InfluxData.Net.InfluxDb.Models.Responses;
+using IoTMon.DataServices.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InfluxData.Net.InfluxDb.Helpers;
 
 namespace IoTMon.DataServices
 {
@@ -30,8 +32,24 @@ namespace IoTMon.DataServices
 
 
         }
+        public async Task<IEnumerable<Models.AMQP.Message>> QueryAsync(Guid deviceId, string sensor)
+        {
+            // query by: 
+            // deviceId, sensor, startDate, endDate, limit
 
-        public async Task WriteAsync(Measurement data)
+            string query = "SELECT * FROM sensors WHERE \"sensor\"= '@SensorName' AND \"deviceId\"='@DeviceId'";
+            IEnumerable<Serie> response = await this.influxDbClient.Client.QueryAsync(
+                query,
+                parameters: new
+                {
+                    @SensorName = sensor,
+                    @DeviceId = deviceId.ToString()
+                },
+                this.dbName);
+            var collection = response.As<Models.AMQP.Message>().ToList();
+            return collection;
+        }
+        public async Task WriteAsync(PointMeasure data)
         {
             if (data == null)
             {
@@ -42,7 +60,7 @@ namespace IoTMon.DataServices
             await this.influxDbClient.Client.WriteAsync(point, this.dbName);
         }
 
-        public async Task WriteAsync(IEnumerable<Measurement> data)
+        public async Task WriteAsync(IEnumerable<PointMeasure> data)
         {
             if (data == null)
             {
@@ -55,7 +73,7 @@ namespace IoTMon.DataServices
     }
     internal static class CustomExtensions
     {
-        public static Point ToPoint(this Measurement data)
+        public static Point ToPoint(this PointMeasure data)
         {
             return new Point()
             {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace IoTMon.DataServices.Contracts
 {
-    public interface IDeviceService
+    public interface IDeviceDataService
     {
         IEnumerable<DeviceDTO> GetDevices(StatusEnum status = StatusEnum.All, ScopeEnum scope = ScopeEnum.All);
     }

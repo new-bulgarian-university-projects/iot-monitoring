@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IoTMon.IngestionWorker
 {
@@ -28,7 +29,7 @@ namespace IoTMon.IngestionWorker
         static void Main(string[] args)
         {
             Configuration = Utils.Configure();
-            RegisterServices();
+            RegisterServices(Configuration);
 
             var factory = new ConnectionFactory()
             {
@@ -51,7 +52,7 @@ namespace IoTMon.IngestionWorker
                     Console.WriteLine(" [x] Received {0}", message);
 
                     // build a point and save to Influx
-                    Measurement point = BuildPoint(message);
+                    PointMeasure point = BuildPoint(message);
                     await influxDb.WriteAsync(point);
 
                     channel.BasicAck(ea.DeliveryTag, false);
@@ -67,21 +68,23 @@ namespace IoTMon.IngestionWorker
             DisposeServices();
         }
 
-        private static Measurement BuildPoint(Message message)
+
+
+        private static PointMeasure BuildPoint(Message message)
         {
             if (message == null)
             {
                 throw new ArgumentNullException(nameof(message));
             }
 
-            Measurement point = new Measurement()
+            PointMeasure point = new PointMeasure()
             {
                 MeasurementName = "sensors",
-                Timestamp = message.Timestamp,
+                Timestamp = message.Time,
                 Tags = new Dictionary<string, object>
                         {
                             { "deviceId", message.DeviceId },
-                            { "sensor", message.SensorLabel }
+                            { "sensor", message.Sensor }
                         },
                 Fields = new Dictionary<string, object>
                         {
@@ -92,10 +95,10 @@ namespace IoTMon.IngestionWorker
 
             return point;
         }
-        private static void RegisterServices()
+        private static void RegisterServices(IConfiguration configuration)
         {
             var services = new ServiceCollection();
-            services.AddDataServices();
+            services.AddDataServices(configuration);
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
 
             rabbitMQConfig = Configuration.GetSection("RabbitMQ").Get<RabbitMQConfig>();

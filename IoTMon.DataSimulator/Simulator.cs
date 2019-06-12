@@ -22,7 +22,7 @@ namespace IoTMon.DataSimulator
         private static IServiceProvider serviceProvider;
         private static IConfiguration Configuration;
 
-        private static IDeviceService deviceService;
+        private static IDeviceDataService deviceService;
         private static ISimulatorHelpers helpers;
 
         private static IModel channel;
@@ -34,7 +34,7 @@ namespace IoTMon.DataSimulator
             Configuration = Utils.Configure();
             RegisterServices();
 
-            deviceService = serviceProvider.GetService<IDeviceService>();
+            deviceService = serviceProvider.GetService<IDeviceDataService>();
             helpers = serviceProvider.GetService<ISimulatorHelpers>();
 
 
@@ -78,9 +78,9 @@ namespace IoTMon.DataSimulator
 
             var message = new Message()
             {
-                Timestamp = helpers.GetDatetimeUTC(),
-                DeviceId = state.Device.Id,
-                SensorLabel = state.Sensor.Label,
+                Time = helpers.GetDatetimeUTC(),
+                DeviceId = state.Device.Id.ToString(),
+                Sensor = state.Sensor.Label,
                 Value = helpers.GetRandomNumber(state.Sensor.Label),
                 ValueType = state.Sensor.ValueType.ToString()
 
@@ -102,7 +102,7 @@ namespace IoTMon.DataSimulator
             services.AddDbContext<ApplicationDbContext>(options =>
                           options.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring")));
 
-            services.AddTransient<IDeviceService, DeviceService>();
+            services.AddTransient<IDeviceDataService, DeviceDataService>();
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
             
 
