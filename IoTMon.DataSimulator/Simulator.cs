@@ -22,7 +22,7 @@ namespace IoTMon.DataSimulator
         private static IServiceProvider serviceProvider;
         private static IConfiguration Configuration;
 
-        private static IDeviceDataService deviceService;
+        private static IDeviceService deviceService;
         private static ISimulatorHelpers helpers;
 
         private static IModel channel;
@@ -34,7 +34,7 @@ namespace IoTMon.DataSimulator
             Configuration = Utils.Configure();
             RegisterServices();
 
-            deviceService = serviceProvider.GetService<IDeviceDataService>();
+            deviceService = serviceProvider.GetService<IDeviceService>();
             helpers = serviceProvider.GetService<ISimulatorHelpers>();
 
 
@@ -102,7 +102,7 @@ namespace IoTMon.DataSimulator
             services.AddDbContext<ApplicationDbContext>(options =>
                           options.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring")));
 
-            services.AddTransient<IDeviceDataService, DeviceDataService>();
+            services.AddTransient<IDeviceService, DeviceService>();
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
             
 
