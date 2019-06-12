@@ -7,15 +7,15 @@ namespace IoTMon.Models.AMQP
 {
     public class Message
     {
-        public DateTime Timestamp { get; set; }
-        public Guid DeviceId { get; set; }
-        public string SensorLabel { get; set; }
+        public DateTime Time { get; set; }
+        public string DeviceId { get; set; }
+        public string Sensor { get; set; }
         public object Value { get; set; }
         public string ValueType { get; set; }
 
         public override string ToString()
         {
-            return $"{Timestamp.ToUniversalTime()} | {DeviceId} | {SensorLabel} | {Value} | {ValueType}";
+            return $"{Time.ToUniversalTime()} | {DeviceId} | {Sensor} | {Value} | {ValueType}";
         }
     }
 }
