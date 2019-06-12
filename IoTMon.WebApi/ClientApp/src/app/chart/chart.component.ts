@@ -4,6 +4,9 @@ import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { DeviceService } from '../device/device.service';
+import { Subscription } from 'rxjs';
+import { ChartData } from '../models/chartData';
 
 am4core.useTheme(am4themes_animated);
 
@@ -18,26 +21,12 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
   private deviceId: string;
   private sensor: string;
 
+  private httpSub = new Subscription();
 
-  constructor(private httpClient: HttpClient,
+
+  constructor(private deviceService: DeviceService,
     private route: ActivatedRoute,
     private zone: NgZone) { }
-
-  ngOnInit(): void {
-    this.route.params.subscribe((p) => {
-      this.deviceId = p['deviceId'];
-      this.sensor = p['sensor'];
-    }, (err) => console.log(err));
-  }
-
-  ngOnDestroy(): void {
-    this.zone.runOutsideAngular(() => {
-      if (this.chart) {
-        this.chart.dispose();
-      }
-    });
-  }
-
 
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
@@ -45,12 +34,9 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
 
       chart.paddingRight = 20;
 
-      this.httpClient.get(`https://localhost:44311/api/devices/${this.deviceId}/sensors/${this.sensor}`)
-        .subscribe((resp: any) => {
-          console.log(resp);
-          const data = resp.map(r => { return { date: new Date(r.date), value: Number.parseFloat(r.value) } });
-          console.log(data);
-          chart.data = data;
+      const sub = this.deviceService.getSensorData(this.deviceId, this.sensor)
+        .subscribe((resp: ChartData[]) => {
+          chart.data = resp;
 
           let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
 
@@ -73,6 +59,25 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
 
           this.chart = chart;
         });
+
+      this.httpSub.add(sub);
     });
+  }
+
+  ngOnInit(): void {
+    this.route.params.subscribe((p) => {
+      this.deviceId = p['deviceId'];
+      this.sensor = p['sensor'];
+    }, (err) => console.log(err));
+  }
+
+  ngOnDestroy(): void {
+    this.zone.runOutsideAngular(() => {
+      if (this.chart) {
+        this.chart.dispose();
+      }
+    });
+
+    this.httpSub.unsubscribe();
   }
 }

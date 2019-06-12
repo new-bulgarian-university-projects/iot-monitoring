@@ -16,6 +16,7 @@ namespace IoTMon.DataServices
             var influxDbConfig = configuration.GetSection("InfluxDb").Get<InfluxDbConfig>();
 
             services.AddSingleton<ITimeSeriesProvider>(ts => new InfluxDbProvider(influxDbConfig));
+            services.AddScoped<IDeviceService, DeviceService>();
         }
     }
 }
