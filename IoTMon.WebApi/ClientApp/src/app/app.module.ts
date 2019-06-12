@@ -8,6 +8,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './material/material.module';
 import { ChartComponent } from './chart/chart.component';
 import { HttpClientModule } from '@angular/common/http';
+import { DeviceRoutingModule } from './device/device-routing.module';
+import { DeviceModule } from './device/device.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    DeviceModule,
     LayoutModule,
     MaterialModule
   ],
