@@ -9,6 +9,49 @@ namespace IoTMon.Data
 {
     public static class ModelBuilderExtensions
     {
+        public static void SeedUsers(this ModelBuilder modelBuilder)
+        {
+            // customer password
+            byte[] userPasswordHash = null;
+            byte[] userPasswordSalt = null;
+            HashPassword("asd123", out userPasswordHash, out userPasswordSalt);
+
+            var users = new User[]
+            {
+                new User()
+                {
+                    Id = new Guid("c0961b4f-466c-4844-bd95-9f7bfa62cc7d"),
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Email = "doe@mail.com",
+                    PasswordSalted = userPasswordSalt,
+                    PasswordHashed = userPasswordHash,
+                },
+
+                new User()
+                {
+                    Id = new Guid("bf669250-dec1-4779-92fc-3c7e8032be7b"),
+                    FirstName = "Alex",
+                    LastName = "Xuan",
+                    Email = "xuan@mail.com",
+                    PasswordSalted = userPasswordSalt,
+                    PasswordHashed = userPasswordHash
+                },
+
+            };
+
+            modelBuilder.Entity<User>()
+                .HasData(users);
+        }
+
+        private static void HashPassword(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(Encoding.UTF8.GetBytes("GPSQZRH9ET0HSZOEJ27UVGUEA0GSZUL82NDN5URYRXP1WY004EPTA3K8DJZFV2EFV3A8VDAF8XXALUEVY1A2GI520A7OKISSO7PBAHOS9BE3JZ4PQPF79TRZ1WFVVV5L")))
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+        }
         public static void SeedDevicesAndSensors(this ModelBuilder modelBuilder)
         {
             // create sensors

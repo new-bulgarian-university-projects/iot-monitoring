@@ -7,7 +7,6 @@ namespace IoTMon.Models
 {
     public class Device
     {
-
         private ICollection<DeviceSensor> deviceSensors;
         public Device()
         {

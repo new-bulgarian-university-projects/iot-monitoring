@@ -55,6 +55,7 @@ namespace IoTMon.Data
                 .IsUnique();
 
             modelBuilder.SeedDevicesAndSensors();
+            modelBuilder.SeedUsers();
 
             base.OnModelCreating(modelBuilder);
         }
