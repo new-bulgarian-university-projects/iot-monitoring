@@ -32,8 +32,10 @@ namespace IoTMon.Models
 
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public byte[] PasswordHashed { get; set; }
 
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
+        [Required]
+        public byte[] PasswordSalted { get; set; }
     }
 }
