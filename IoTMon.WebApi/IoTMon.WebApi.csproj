@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
@@ -15,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\IoTMon.DataServices\IoTMon.DataServices.csproj" />
     <ProjectReference Include="..\IoTMon.Data\IoTMon.Data.csproj" />
+    <ProjectReference Include="..\IoTMon.Services\IoTMon.Services.csproj" />
   </ItemGroup>
 
 </Project>

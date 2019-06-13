@@ -17,6 +17,7 @@ namespace IoTMon.DataServices
 
             services.AddSingleton<ITimeSeriesProvider>(ts => new InfluxDbProvider(influxDbConfig));
             services.AddScoped<IDeviceService, DeviceService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }
