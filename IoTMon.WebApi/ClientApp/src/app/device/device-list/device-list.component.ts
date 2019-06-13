@@ -25,6 +25,19 @@ export class DeviceListComponent implements OnInit, OnDestroy {
 
   constructor(private deviceService: DeviceService) { }
 
+  isBoolean(value: string): boolean {
+    value = value.toString().toLowerCase();
+    return (value == 'true' || value == 'false');
+  }
+
+  processValue(element: string): any {
+    if(this.isBoolean(element)){
+        return element.toString().toLowerCase() === 'true' ? "✔" : "✖";
+    }
+    else {
+      return element;
+    }
+  }
 
   ngOnInit() {
     const sub = this.deviceService.getAllDevices()
