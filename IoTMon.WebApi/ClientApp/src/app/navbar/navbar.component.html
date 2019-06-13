@@ -15,6 +15,29 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>ClientApp</span>
+
+
+      <!-- This fills the remaining space of the current row -->
+      <span class="fill-remaining-space"></span>
+      <ng-template [ngIf]="isAuthenticated()">
+        <button mat-button color="accent" [routerLink]="['/', 'users', getUsername()]">
+          <mat-icon>account_box</mat-icon> &nbsp; {{getUsername()}}
+        </button>
+
+        <button mat-button (click)="authService.logout()">
+          <mat-icon>exit_to_app</mat-icon> &nbsp; Logout
+        </button>
+      </ng-template>
+      <ng-template [ngIf]="!isAuthenticated()">
+        <button mat-button [routerLink]="['signin']">
+          <mat-icon>perm_identity</mat-icon> &nbsp; Login
+        </button>
+        <button mat-button [routerLink]="['signup']">
+          <mat-icon> call_made</mat-icon> &nbsp; Register
+        </button>
+      </ng-template>
+
+
     </mat-toolbar>
 
 

@@ -51,8 +51,8 @@ namespace IoTMon.WebApi.Controllers
             }
             try
             {
-                this.userService.Create(user);
-                return this.Ok();
+                var createdUser = this.userService.Create(user);
+                return this.Ok(createdUser);
             }
             catch (Exception ex)
             {

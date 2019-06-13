@@ -10,6 +10,13 @@ import { ChartComponent } from './chart/chart.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DeviceRoutingModule } from './device/device-routing.module';
 import { DeviceModule } from './device/device.module';
+import { AppConstants } from './helpers/constants';
+import { JwtModule } from '@auth0/angular-jwt';
+import { AuthModule } from './auth/auth.module';
+
+export function tokenGetter() {
+  return localStorage.getItem(AppConstants.jwtKey);
+}
 
 @NgModule({
   declarations: [
@@ -21,9 +28,15 @@ import { DeviceModule } from './device/device.module';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    AuthModule,
     DeviceModule,
     LayoutModule,
-    MaterialModule
+    MaterialModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

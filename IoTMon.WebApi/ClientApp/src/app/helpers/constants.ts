@@ -1,5 +1,10 @@
 export class AppConstants {
-    public static sensorIconMap: any = {
+    
+    public static readonly baseUrl: string = "https://localhost:44311/api";
+    
+    public static readonly jwtKey: string = "jwtToken";
+
+    public static readonly sensorIconMap: any = {
         'temp': ' wb_sunny',
         'openclose': 'lock_open',
         'sound': 'volume_up',
@@ -10,12 +15,3 @@ export class AppConstants {
         'co2': 'dock'
     };
 }
-
-// no2
-// hum
-// so2
-// openclose
-// o3
-// co2
-// temp
-// sound
