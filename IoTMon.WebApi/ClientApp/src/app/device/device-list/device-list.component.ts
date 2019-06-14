@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { DeviceService } from '../device.service';
-import { Device } from 'src/app/models/device';
+import { Device } from 'src/app/models/device.model';
 import { Subscription } from 'rxjs';
 
 @Component({

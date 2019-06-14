@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { DeviceService } from '../device/device.service';
 import { Subscription } from 'rxjs';
-import { ChartData } from '../models/chartData';
+import { ChartData } from '../models/chartData.model';
 
 am4core.useTheme(am4themes_animated);
 

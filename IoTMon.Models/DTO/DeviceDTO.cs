@@ -30,5 +30,6 @@ namespace IoTMon.Models.DTO
         public bool IsPublic { get; set; }
 
         public List<SensorDTO> Sensors { get; set; }
+        public List<string> SensorIds { get; set; }
     }
 }

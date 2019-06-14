@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Device } from '../models/device';
+import { Device } from '../models/device.model';
 import { map } from 'rxjs/operators';
-import { ChartData } from '../models/chartData';
+import { ChartData } from '../models/chartData.model';
 import { AppConstants } from '../helpers/constants';
+import { Sensor } from '../models/sensor.model';
 
 
 @Injectable({
@@ -13,7 +14,9 @@ import { AppConstants } from '../helpers/constants';
 export class DeviceService {
   private baseUrl = 'https://localhost:44311/api';
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+
+  }
 
   getSensorData(deviceId: string, sensor: string): Observable<ChartData[]> {
     return this.httpClient.get<ChartData[]>(this.baseUrl + `/devices/${deviceId}/sensors/${sensor}`)
@@ -24,11 +27,15 @@ export class DeviceService {
       ));
   }
 
+  getAllSensors(): Observable<Sensor[]> {
+    return this.httpClient.get<Sensor[]>(this.baseUrl + '/sensors');
+  }
+
   getAllDevices(): Observable<Device[]> {
     return this.httpClient.get<Device[]>(this.baseUrl + '/devices');
   }
 
-  getIcon(sensorLabel: string): string{
+  getIcon(sensorLabel: string): string {
     return AppConstants.sensorIconMap[sensorLabel];
   }
 

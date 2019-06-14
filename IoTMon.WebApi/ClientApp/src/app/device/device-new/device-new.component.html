@@ -1,0 +1,63 @@
+<mat-card class="col-centered full-width">
+  <mat-card-header>
+    <mat-card-title>Device Register</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()" #f='ngForm' class="col-centered">
+      <div class="container">
+        <div class="row">
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>Device Name</mat-label>
+            <input matInput placeholder="" [(ngModel)]="device.deviceName" minlength="2" name="deviceName" required>
+          </mat-form-field>
+        </div>
+        <div class="checkbox-section">
+          <div class="row">
+            <mat-form-field style="width: 20">
+              <input matInput placeholder="Interval in seconds" [(ngModel)]="device.intervalInSeconds" min="1"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                name="intervalInSeconds" type=number required matTooltipPosition="right"
+                matTooltip="The interval in seconds in which the Device sends the collected data."
+                matTooltipClass="tooltip">
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <mat-checkbox checked [(ngModel)]="device.isActivated" name="isActivated" matTooltipPosition="right"
+              matTooltip="Activate the sensor immediately." matTooltipClass="tooltip">
+              Activate now
+            </mat-checkbox>
+          </div>
+          <div class=" row">
+            <mat-checkbox [(ngModel)]="device.isPublic" name="isPublic" matTooltipPosition="right"
+              matTooltip="Make the device measurements visible to everyone." matTooltipClass="tooltip">
+              Make my device data <strong>Public</strong>
+            </mat-checkbox>
+          </div>
+        </div>
+        <mat-divider [inset]="true">
+        </mat-divider>
+        <div class="sensor-section">
+          <mat-grid-tile-header>
+            <h4 style="color: gray">
+              Sensors
+            </h4>
+          </mat-grid-tile-header>
+          <mat-grid-list cols="2" rowHeight="50px">
+            <br>
+            <mat-grid-tile *ngFor=" let sensor of availableSensors">
+              <mat-checkbox class="text-inside-grid" [(ngModel)]="sensor.checked" [value]="sensor.id" [id]=" sensor.id"
+                matTooltipPosition="right" [matTooltip]="sensor.description" matTooltipClass="tooltip"
+                (change)="onChange()" name="{{sensor.id}}">
+                {{sensor.friendlyLabel}} - {{sensor.measurementUnit}}
+              </mat-checkbox>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </div>
+      <button type="submit" mat-raised-button [disabled]="!isFormValid()" color="primary">Register </button>
+    </form>
+    <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>
