@@ -36,5 +36,12 @@ namespace IoTMon.WebApi.Controllers
             var processed = result.Select(r => new { Date = r.Time, Value = r.Value }).ToList();
             return Ok(processed);
         }
+
+        [HttpGet("~/api/sensors")]
+        public ActionResult GetSensors()
+        {
+            var result = this.deviceService.GetSensors();
+            return this.Ok(result);
+        }
     }
 }

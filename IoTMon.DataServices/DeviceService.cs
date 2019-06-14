@@ -21,6 +21,12 @@ namespace IoTMon.DataServices
             this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
         }
 
+        public IEnumerable<SensorDTO> GetSensors()
+        {
+            var sensors = this.dbContext.Sensors.Select(s => new SensorDTO(s));
+            return sensors;
+        }
+
         public IEnumerable<DeviceDTO> GetDevices(StatusEnum status = StatusEnum.All, ScopeEnum scope = ScopeEnum.All)
         {
             IQueryable<Device> query = this.dbContext.Devices;
