@@ -8,23 +8,27 @@
         <div class="row">
         </div>
         <div class="row">
-          <mat-form-field class="input-width">
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>First Name</mat-label>
             <input matInput placeholder="First Name" [(ngModel)]="user.firstName" minlength="2" name="firstName"
               required>
           </mat-form-field>
         </div>
         <div class="row">
-          <mat-form-field class="input-width">
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>Last Name</mat-label>
             <input matInput placeholder="Last Name" [(ngModel)]="user.lastName" minlength="2" name="lastName" required>
           </mat-form-field>
         </div>
         <div class="row">
-          <mat-form-field class="input-width">
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>Email</mat-label>
             <input matInput placeholder="Email" [(ngModel)]="user.email" minlength="4" name="email" email required>
           </mat-form-field>
         </div>
         <div class="row">
-          <mat-form-field class="input-width">
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>Password</mat-label>
             <input matInput placeholder="Password" [(ngModel)]="user.password" minlength="6" type="password"
               name="password" required>
           </mat-form-field>

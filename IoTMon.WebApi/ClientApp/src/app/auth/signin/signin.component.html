@@ -1,4 +1,3 @@
-
 <mat-card class="col-centered full-width">
   <mat-card-header>
     <mat-card-title>Login</mat-card-title>
@@ -7,32 +6,21 @@
     <form (ngSubmit)="onSubmit()" #f='ngForm' class="col-centered">
       <div class="container">
         <div class="row">
-          <mat-form-field class="input-width">
-            <input matInput
-                  placeholder="Email"
-                  [(ngModel)]="email"
-                  email
-                  name="email"
-                  required>
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" [(ngModel)]="email" email name="email" required>
           </mat-form-field>
         </div>
         <div class="row">
-         <mat-form-field class="input-width">
-            <input matInput
-                   placeholder="Password"
-                   [(ngModel)]="password"
-                   minlength="6"
-                   type="password"
-                   name="password"
-                   required>
+          <mat-form-field appearance="outline" class="input-width">
+            <mat-label>Password</mat-label>
+            <input matInput placeholder="Password" [(ngModel)]="password" minlength="6" type="password" name="password"
+              required>
           </mat-form-field>
         </div>
         <mat-hint *ngIf="authService.invalidLogin">Email or password are wrong !</mat-hint>
       </div>
-      <button type="submit"
-          mat-raised-button
-          [disabled]="f.invalid"
-          color="primary">Login </button>
+      <button type="submit" mat-raised-button [disabled]="f.invalid" color="primary">Login </button>
     </form>
     <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
   </mat-card-content>
@@ -40,4 +28,3 @@
 
   </mat-card-actions>
 </mat-card>
-
