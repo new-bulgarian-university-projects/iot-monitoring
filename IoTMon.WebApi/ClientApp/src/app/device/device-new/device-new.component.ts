@@ -4,6 +4,7 @@ import { Sensor } from 'src/app/models/sensor.model';
 import { Subscription } from 'rxjs';
 import { DeviceService } from '../device.service';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-device-new',
@@ -12,18 +13,19 @@ import { NgForm } from '@angular/forms';
 })
 export class DeviceNewComponent implements OnInit, OnDestroy {
 
-  sub = new Subscription();
+  subs = new Subscription();
 
   device: Device;
   availableSensors: Sensor[];
 
   @ViewChild(NgForm, { static: true }) form;
 
-  constructor(private deviceService: DeviceService) {
+  constructor(private deviceService: DeviceService,
+    private router: Router) {
   }
 
   ngOnInit() {
-    this.sub = this.deviceService.getAllSensors()
+    const httpSub = this.deviceService.getAllSensors()
       .subscribe((resp: Sensor[]) => {
         this.availableSensors = resp.map(r => {
           r.checked = false;
@@ -34,11 +36,20 @@ export class DeviceNewComponent implements OnInit, OnDestroy {
     this.device = new Device();
     this.device.isActivated = true;
     this.device.intervalInSeconds = 15;
+
+    this.subs.add(httpSub);
   }
 
   onSubmit() {
+    if (confirm("Are you sure you want to create this device ?")) {
+      const httpSub = this.deviceService.createDevice(this.device)
+        .subscribe((resp) => {
+          console.log('created ', resp);
+          this.router.navigate(['/devices']);
+        }, err => console.log(err));
 
-    console.log(this.device);
+      this.subs.add(httpSub);
+    }
   }
 
   onChange() {
@@ -55,6 +66,6 @@ export class DeviceNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subs.unsubscribe();
   }
 }

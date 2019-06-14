@@ -7,6 +7,10 @@ namespace IoTMon.Models.DTO
 {
     public class DeviceDTO
     {
+        public DeviceDTO()
+        {
+
+        }
         public DeviceDTO(Device device)
         {
             this.Id = device.Id;

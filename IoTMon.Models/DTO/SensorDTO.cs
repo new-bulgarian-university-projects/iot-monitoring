@@ -7,8 +7,17 @@ namespace IoTMon.Models.DTO
 {
     public class SensorDTO
     {
+        public SensorDTO()
+        {
+
+        }
         public SensorDTO(Sensor sensor)
         {
+            if (sensor == null)
+            {
+                return;
+            }
+
             this.Id = sensor.Id;
             this.Label = sensor.Label;
             this.FriendlyLabel = sensor.FriendlyLabel;

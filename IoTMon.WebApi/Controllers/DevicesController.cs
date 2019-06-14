@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IoTMon.DataServices.Contracts;
 using IoTMon.Models.AMQP;
+using IoTMon.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,20 @@ namespace IoTMon.WebApi.Controllers
             var result = await influxDb.QueryAsync(deviceId, sensor);
             var processed = result.Select(r => new { Date = r.Time, Value = r.Value }).ToList();
             return Ok(processed);
+        }
+
+        [HttpPost()]
+        public ActionResult CreateDevice(DeviceDTO device)
+        {
+            try
+            {
+                var result = this.deviceService.CreateDevice(device);
+                return this.Ok(result);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Server error");
+            }
         }
 
         [HttpGet("~/api/sensors")]

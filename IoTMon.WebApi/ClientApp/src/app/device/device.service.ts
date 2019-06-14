@@ -27,6 +27,10 @@ export class DeviceService {
       ));
   }
 
+  createDevice(device: Device): Observable<Device> {
+    return this.httpClient.post<Device>(this.baseUrl + '/devices', device);
+  }
+
   getAllSensors(): Observable<Sensor[]> {
     return this.httpClient.get<Sensor[]>(this.baseUrl + '/sensors');
   }

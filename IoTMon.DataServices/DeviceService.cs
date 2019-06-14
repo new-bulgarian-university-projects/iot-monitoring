@@ -56,5 +56,32 @@ namespace IoTMon.DataServices
 
             return devices;
         }
+
+        public DeviceDTO CreateDevice(DeviceDTO device)
+        {
+            var newDevice = new Device()
+            {
+                Id = Guid.NewGuid(),
+                DeviceName = device.DeviceName,
+                IsPublic = device.IsPublic,
+                IsActivated = device.IsActivated,
+                IsDeleted = false,
+                IntervalInSeconds = device.IntervalInSeconds
+            };
+
+            foreach (var sensorId in device.SensorIds)
+            {
+                newDevice.DeviceSensors.Add(new DeviceSensor()
+                {
+                    DeviceId = newDevice.Id,
+                    SensorId = new Guid(sensorId)
+                });
+            }
+
+            this.dbContext.Devices.Add(newDevice);
+            this.dbContext.SaveChanges();
+
+            return new DeviceDTO(newDevice);
+        }
     }
 }
