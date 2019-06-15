@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { Observable, from, Subscription, Subject } from 'rxjs';
+import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Device } from '../models/device.model';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import { ChartData } from '../models/chartData.model';
 import { AppConstants } from '../helpers/constants';
 import { Sensor } from '../models/sensor.model';
@@ -12,10 +12,11 @@ import { Sensor } from '../models/sensor.model';
   providedIn: 'root'
 })
 export class DeviceService {
-  private baseUrl = 'https://localhost:44311/api';
+  private readonly baseUrl = 'https://localhost:44311/api';
+  public readonly onDelete: Subject<string>;
 
   constructor(private httpClient: HttpClient) {
-
+    this.onDelete = new Subject<string>();
   }
 
   getSensorData(deviceId: string, sensor: string): Observable<ChartData[]> {
@@ -28,7 +29,18 @@ export class DeviceService {
   }
 
   createDevice(device: Device): Observable<Device> {
+    if (!device) {
+      return null;
+    }
     return this.httpClient.post<Device>(this.baseUrl + '/devices', device);
+  }
+
+  deleteDevice(deviceId: string): Subscription {
+    if (!deviceId) {
+      return null;
+    }
+    const url = this.baseUrl + `/devices/${deviceId}`;
+    this.httpClient.delete<Device>(url).pipe(first()).subscribe(() => {this.onDelete.next(deviceId)});
   }
 
   getAllSensors(): Observable<Sensor[]> {

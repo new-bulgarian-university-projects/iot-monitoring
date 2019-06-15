@@ -29,7 +29,8 @@ namespace IoTMon.DataServices
 
         public IEnumerable<DeviceDTO> GetDevices(StatusEnum status = StatusEnum.All, ScopeEnum scope = ScopeEnum.All)
         {
-            IQueryable<Device> query = this.dbContext.Devices;
+            IQueryable<Device> query = this.dbContext.Devices
+                .Where(d => d.IsDeleted == false);
 
             if (status == StatusEnum.Deactivated)
             {
@@ -82,6 +83,21 @@ namespace IoTMon.DataServices
             this.dbContext.SaveChanges();
 
             return new DeviceDTO(newDevice);
+        }
+
+        public DeviceDTO DeleteDevice(Guid deviceId)
+        {
+            var device = this.dbContext.Devices.SingleOrDefault(d => d.Id == deviceId);
+            if(device == null)
+            {
+                return null;
+            }
+
+            device.IsDeleted = true;
+            this.dbContext.Devices.Update(device);
+            this.dbContext.SaveChanges();
+
+            return new DeviceDTO(device);
         }
     }
 }

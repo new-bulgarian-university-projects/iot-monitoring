@@ -11,5 +11,6 @@ namespace IoTMon.DataServices.Contracts
         IEnumerable<DeviceDTO> GetDevices(StatusEnum status = StatusEnum.All, ScopeEnum scope = ScopeEnum.All);
         IEnumerable<SensorDTO> GetSensors();
         DeviceDTO CreateDevice(DeviceDTO device);
+        DeviceDTO DeleteDevice(Guid deviceId);
     }
 }

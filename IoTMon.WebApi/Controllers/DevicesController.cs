@@ -1,12 +1,11 @@
-﻿using System;
+﻿using IoTMon.DataServices.Contracts;
+using IoTMon.Models.AMQP;
+using IoTMon.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IoTMon.DataServices.Contracts;
-using IoTMon.Models.AMQP;
-using IoTMon.Models.DTO;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace IoTMon.WebApi.Controllers
 {
@@ -49,6 +48,24 @@ namespace IoTMon.WebApi.Controllers
             catch (Exception)
             {
                 return StatusCode(500, "Server error");
+            }
+        }
+
+        [HttpDelete("{deviceId:guid}")]
+        public ActionResult DeleteDevice(Guid deviceId)
+        {
+            try
+            {
+                var deleted = this.deviceService.DeleteDevice(deviceId);
+                if(deleted == null)
+                {
+                    return this.BadRequest("Could not find device with id " + deviceId);
+                }
+                return this.Ok(deleted);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server Error");
             }
         }
 

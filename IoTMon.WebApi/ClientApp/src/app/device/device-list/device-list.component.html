@@ -10,16 +10,27 @@
       <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
         <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
 
-          <span class="example-element-description-attribution"> Sensors </span>
-          <mat-divider></mat-divider>
+
 
           <mat-action-list>
+
+
+            <span class="example-element-description-attribution"> Sensors </span>
             <button *ngFor="let sensor of element.sensors" mat-list-item
               [routerLink]="['/chart','device', element.id, 'sensor', sensor.label]">
               <mat-icon color="primary">{{deviceService.getIcon(sensor.label)}}</mat-icon>
               &nbsp; {{sensor.friendlyLabel}}
             </button>
           </mat-action-list>
+          <span class="fill-remaining-space"></span>
+          <mat-action-list class='table-actions'>
+            <span class="example-element-description-attribution"> Actions </span>
+            <div>
+              <button mat-raised-button color="primary" [routerLink]="['edit']">Edit</button>
+              <button mat-raised-button color="warn" (click)="onDelete(element)">Delete</button>
+            </div>
+          </mat-action-list>
+
 
         </div>
       </td>
@@ -35,4 +46,3 @@
 </div>
 <!-- <button mat-mini-fab color="accent">+</button> -->
 <button mat-raised-button color="accent" [routerLink]="['/devices','new']">New Device</button>
-
