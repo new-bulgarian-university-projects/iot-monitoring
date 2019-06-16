@@ -13,6 +13,7 @@ import { DeviceModule } from './device/device.module';
 import { AppConstants } from './helpers/constants';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthModule } from './auth/auth.module';
+import { FormsModule } from '@angular/forms';
 
 export function tokenGetter() {
   return localStorage.getItem(AppConstants.jwtKey);
@@ -30,6 +31,7 @@ export function tokenGetter() {
     AppRoutingModule,
     AuthModule,
     DeviceModule,
+    FormsModule,
     LayoutModule,
     MaterialModule,
     JwtModule.forRoot({

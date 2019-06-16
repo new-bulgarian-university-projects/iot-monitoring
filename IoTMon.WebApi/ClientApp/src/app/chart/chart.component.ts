@@ -18,8 +18,10 @@ am4core.useTheme(am4themes_animated);
 export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private chart: am4charts.XYChart;
+  private interval: NodeJS.Timer;
   private deviceId: string;
   private sensor: string;
+  private isLive: boolean = false;
 
   private httpSub = new Subscription();
 
@@ -39,12 +41,15 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
           chart.data = resp;
 
           let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-
+          dateAxis.dateFormats.setKey("day", "HH:mm:ss dd/MM/yyyy")
+          dateAxis.periodChangeDateFormats.setKey("hour", "dd/MM/yyyy");
           dateAxis.renderer.grid.template.location = 0;
+
 
           let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
           valueAxis.tooltip.disabled = true;
           valueAxis.renderer.minWidth = 35;
+
 
           let series = chart.series.push(new am4charts.LineSeries());
           series.dataFields.dateX = "date";
@@ -56,12 +61,50 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
           let scrollbarX = new am4charts.XYChartScrollbar();
           scrollbarX.series.push(series);
           chart.scrollbarX = scrollbarX;
-
           this.chart = chart;
+
+          this.chart.events.on("datavalidated", () => {
+            dateAxis.zoom({ start: 0.9999, end: 1.00001 }, false, false);
+          });
+
+          let bullet = series.createChild(am4charts.CircleBullet);
+          bullet.circle.radius = 5;
+          bullet.fillOpacity = 1;
+          bullet.fill = chart.colors.getIndex(0);
+          bullet.isMeasured = false;
+
+          series.events.on("validated", () => {
+            bullet.moveTo(series.dataItems.last.point);
+            bullet.validatePosition();
+          })
+
         });
 
       this.httpSub.add(sub);
     });
+  }
+
+  onChange() {
+    if (this.isLive) {
+      this.startLive();
+    }
+    else {
+      this.stopLive();
+    }
+  }
+  stopLive() {
+    clearInterval(this.interval);
+  }
+
+  startLive(): NodeJS.Timer {
+    this.interval = setInterval(() => {
+      console.log('add');
+
+      this.chart.addData(
+        { date: Date.now(), value: Math.random() * 100 }
+      );
+    }, 1000)
+    return this.interval;
   }
 
   ngOnInit(): void {
@@ -78,6 +121,9 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
       }
     });
 
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
     this.httpSub.unsubscribe();
   }
 }
