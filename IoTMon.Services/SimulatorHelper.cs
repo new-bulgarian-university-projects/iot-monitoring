@@ -21,9 +21,9 @@ namespace IoTMon.Services
             {"openclose", new SensorRange(0,1) },
         };
 
-        public DateTime GetDatetimeUTC()
+        public DateTime GetDatetime()
         {
-            return DateTime.UtcNow;
+            return DateTime.Now;
         }
 
         public object GetRandomNumber(string sensor)

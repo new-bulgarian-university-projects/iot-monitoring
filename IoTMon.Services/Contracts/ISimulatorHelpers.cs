@@ -8,6 +8,6 @@ namespace IoTMon.Services.Contracts
     public interface ISimulatorHelpers
     {
         object GetRandomNumber(string sensor);
-        DateTime GetDatetimeUTC ();
+        DateTime GetDatetime ();
     }
 }

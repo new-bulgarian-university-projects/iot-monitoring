@@ -32,19 +32,34 @@ namespace IoTMon.DataServices
 
 
         }
-        public async Task<IEnumerable<Models.AMQP.Message>> QueryAsync(Guid deviceId, string sensor)
+        public async Task<IEnumerable<Models.AMQP.Message>> QueryAsync(Guid deviceId, string sensor, DateTime? from = null)
         {
             // query by: 
             // deviceId, sensor, startDate, endDate, limit
 
             string query = "SELECT * FROM sensors WHERE \"sensor\"= '@SensorName' AND \"deviceId\"='@DeviceId'";
-            IEnumerable<Serie> response = await this.influxDbClient.Client.QueryAsync(
-                query,
-                parameters: new
+            object parameters;
+            if (from.HasValue)
+            {
+                query += " AND time > '@From'";
+                parameters = new
+                {
+                    @SensorName = sensor,
+                    @DeviceId = deviceId.ToString(),
+                    @From = from.Value.AddSeconds(-3).ToString("yyyy-MM-ddTHH:mm:ssZ")
+                };
+            }
+            else
+            {
+                parameters = new
                 {
                     @SensorName = sensor,
                     @DeviceId = deviceId.ToString()
-                },
+                };
+            }
+            IEnumerable<Serie> response = await this.influxDbClient.Client.QueryAsync(
+                query,
+                parameters: parameters,
                 this.dbName);
             var collection = response.As<Models.AMQP.Message>().ToList();
             return collection;

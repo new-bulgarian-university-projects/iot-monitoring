@@ -78,7 +78,7 @@ namespace IoTMon.DataSimulator
 
             var message = new Message()
             {
-                Time = helpers.GetDatetimeUTC(),
+                Time = DateTime.Now,
                 DeviceId = state.Device.Id.ToString(),
                 Sensor = state.Sensor.Label,
                 Value = helpers.GetRandomNumber(state.Sensor.Label),
