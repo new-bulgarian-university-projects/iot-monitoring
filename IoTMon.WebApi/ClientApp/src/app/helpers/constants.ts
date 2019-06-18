@@ -1,6 +1,7 @@
 export class AppConstants {
     
     public static readonly baseUrl: string = "https://localhost:44311/api";
+    public static readonly socket: string = "https://localhost:44311/live";
     
     public static readonly jwtKey: string = "jwtToken";
 

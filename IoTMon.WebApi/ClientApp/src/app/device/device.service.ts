@@ -8,6 +8,7 @@ import { AppConstants } from '../helpers/constants';
 import { Sensor } from '../models/sensor.model';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +24,11 @@ export class DeviceService {
     return this.httpClient.get<ChartData[]>(this.baseUrl + `/devices/${deviceId}/sensors/${sensor}`)
       .pipe(map(
         r => r.map(
-          (x => { return { date: new Date(x.date), value: x.value } })
+          ((x: ChartData) => {
+            const time = new Date(x.date).toISOString().replace("Z", "");
+            const chartData = new ChartData(new Date(time), x.value);
+            return chartData;
+          })
         )
       ));
   }
@@ -40,7 +45,7 @@ export class DeviceService {
       return null;
     }
     const url = this.baseUrl + `/devices/${deviceId}`;
-    this.httpClient.delete<Device>(url).pipe(first()).subscribe(() => {this.onDelete.next(deviceId)});
+    this.httpClient.delete<Device>(url).pipe(first()).subscribe(() => { this.onDelete.next(deviceId) });
   }
 
   getAllSensors(): Observable<Sensor[]> {

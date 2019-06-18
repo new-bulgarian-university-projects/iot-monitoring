@@ -1,6 +1,7 @@
 ﻿using IoTMon.DataServices.Contracts;
 using IoTMon.Models.AMQP;
 using IoTMon.Models.DTO;
+using IoTMon.Models.TimeSeries;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace IoTMon.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<Message>>> GetDeviceSensor(Guid deviceId, string sensor)
         {
             var result = await influxDb.QueryAsync(deviceId, sensor);
-            var processed = result.Select(r => new { Date = r.Time, Value = r.Value }).ToList();
+            var processed = result.Select(r => new ChartData(r.Time, Convert.ToDouble(r.Value))).ToList();
             return Ok(processed);
         }
 

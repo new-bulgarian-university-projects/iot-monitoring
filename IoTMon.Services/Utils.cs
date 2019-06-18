@@ -10,6 +10,8 @@ namespace IoTMon.Services
 {
     public static class Utils
     {
+        public static Dictionary<string,TimerManager> timers = new Dictionary<string, TimerManager>();
+
         public static byte[] Serialize(object data)
         {
             if (data == null)
