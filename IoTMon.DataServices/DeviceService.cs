@@ -99,5 +99,16 @@ namespace IoTMon.DataServices
 
             return new DeviceDTO(device);
         }
+
+        public DeviceDTO GetDeviceById(Guid deviceId)
+        {
+            var device = this.dbContext.Devices
+                        .Include(d => d.DeviceSensors)
+                        .ThenInclude(ds => ds.Sensor)
+                        .Single(d => d.Id == deviceId);
+
+            return new DeviceDTO(device);
+        
+        }
     }
 }

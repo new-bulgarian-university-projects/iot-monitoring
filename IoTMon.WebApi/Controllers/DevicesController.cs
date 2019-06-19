@@ -40,6 +40,21 @@ namespace IoTMon.WebApi.Controllers
             return Ok(processed);
         }
 
+        [HttpGet("{deviceId:guid}")]
+        public ActionResult GetDeviceById(Guid deviceId)
+        {
+            try
+            {
+                var device = this.deviceService.GetDeviceById(deviceId);
+                return Ok(device);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server error while getting device with ID " + deviceId);
+            }
+
+        }
+
         [HttpPost()]
         public ActionResult CreateDevice(DeviceDTO device)
         {

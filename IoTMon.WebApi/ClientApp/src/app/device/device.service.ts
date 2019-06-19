@@ -13,7 +13,6 @@ import { Sensor } from '../models/sensor.model';
   providedIn: 'root'
 })
 export class DeviceService {
-  private readonly baseUrl = 'https://localhost:44311/api';
   public readonly onDelete: Subject<string>;
 
   constructor(private httpClient: HttpClient) {
@@ -21,7 +20,7 @@ export class DeviceService {
   }
 
   getSensorData(deviceId: string, sensor: string, from?: Date, to?: Date): Observable<ChartData[]> {
-    let url = this.baseUrl + `/devices/${deviceId}/sensors/${sensor}`;
+    let url = AppConstants.baseUrl + `/devices/${deviceId}/sensors/${sensor}`;
     if (from) {
       url += `?from=${from.toISOString()}`;
     }
@@ -44,23 +43,28 @@ export class DeviceService {
     if (!device) {
       return null;
     }
-    return this.httpClient.post<Device>(this.baseUrl + '/devices', device);
+    return this.httpClient.post<Device>(AppConstants.baseUrl + '/devices', device);
   }
 
   deleteDevice(deviceId: string): Subscription {
     if (!deviceId) {
       return null;
     }
-    const url = this.baseUrl + `/devices/${deviceId}`;
-    this.httpClient.delete<Device>(url).pipe(first()).subscribe(() => { this.onDelete.next(deviceId) });
+    const url = AppConstants.baseUrl + `/devices/${deviceId}`;
+    return this.httpClient.delete<Device>(url).pipe(first()).subscribe(() => { this.onDelete.next(deviceId) });
   }
 
   getAllSensors(): Observable<Sensor[]> {
-    return this.httpClient.get<Sensor[]>(this.baseUrl + '/sensors');
+    return this.httpClient.get<Sensor[]>(AppConstants.baseUrl + '/sensors');
+  }
+
+  getDeviceById(deviceId: string): Observable<Device> {
+    const url = `${AppConstants.baseUrl}/devices/${deviceId}`;
+    return this.httpClient.get<Device>(url);
   }
 
   getAllDevices(): Observable<Device[]> {
-    return this.httpClient.get<Device[]>(this.baseUrl + '/devices');
+    return this.httpClient.get<Device[]>(AppConstants.baseUrl + '/devices');
   }
 
   getIcon(sensorLabel: string): string {

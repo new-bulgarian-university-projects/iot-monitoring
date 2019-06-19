@@ -9,6 +9,7 @@ namespace IoTMon.DataServices.Contracts
     public interface IDeviceService
     {
         IEnumerable<DeviceDTO> GetDevices(StatusEnum status = StatusEnum.All, ScopeEnum scope = ScopeEnum.All);
+        DeviceDTO GetDeviceById(Guid deviceId);
         IEnumerable<SensorDTO> GetSensors();
         DeviceDTO CreateDevice(DeviceDTO device);
         DeviceDTO DeleteDevice(Guid deviceId);

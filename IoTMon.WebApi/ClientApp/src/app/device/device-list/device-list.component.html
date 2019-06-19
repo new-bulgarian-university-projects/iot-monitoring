@@ -24,9 +24,9 @@
           </mat-action-list>
           <span class="fill-remaining-space"></span>
           <mat-action-list class='table-actions'>
-            <span class="example-element-description-attribution"> Actions </span>
+            <span class="example-element-description-attribution"> Device Actions </span>
             <div>
-              <button mat-raised-button color="primary" [routerLink]="['edit']">Edit</button>
+              <button mat-raised-button color="primary" [routerLink]="[element.id, 'edit']">Edit</button>
               <button mat-raised-button color="warn" (click)="onDelete(element)">Delete</button>
             </div>
           </mat-action-list>
