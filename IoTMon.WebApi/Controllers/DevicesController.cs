@@ -31,9 +31,11 @@ namespace IoTMon.WebApi.Controllers
         }
 
         [HttpGet("{deviceId:guid}/sensors/{sensor}")]
-        public async Task<ActionResult<IEnumerable<Message>>> GetDeviceSensor(Guid deviceId, string sensor)
+        public async Task<ActionResult<IEnumerable<Message>>> GetDeviceSensor(Guid deviceId, string sensor,
+            [FromQuery(Name = "from")] DateTime? from,
+            [FromQuery(Name = "to")] DateTime? to)
         {
-            var result = await influxDb.QueryAsync(deviceId, sensor);
+            var result = await influxDb.QueryAsync(deviceId, sensor, from, to);
             var processed = result.Select(r => new ChartData(r.Time, Convert.ToDouble(r.Value))).ToList();
             return Ok(processed);
         }
@@ -58,7 +60,7 @@ namespace IoTMon.WebApi.Controllers
             try
             {
                 var deleted = this.deviceService.DeleteDevice(deviceId);
-                if(deleted == null)
+                if (deleted == null)
                 {
                     return this.BadRequest("Could not find device with id " + deviceId);
                 }

@@ -25,6 +25,8 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
   private isLive: boolean = false;
   private connectionId: string;
   private httpSub = new Subscription();
+  private dateTimeRange: Date[];
+  private maxDate = new Date();
 
 
   constructor(private deviceService: DeviceService,
@@ -33,13 +35,45 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
     private signalRService: SignalrService,
     private zone: NgZone) { }
 
+  onRangeChange() {
+    if (this.dateTimeRange.length > 0 || this.dateTimeRange[0]) {
+      const sub = this.deviceService.getSensorData(this.deviceId, this.sensor, this.dateTimeRange[0], this.dateTimeRange[1])
+        .subscribe((resp: ChartData[]) => {
+          if (resp && resp.length > 0) {
+            console.log(resp);
+            this.chart.data = resp;
+          }
+          else {
+            this.chart.data = [];
+          }
+        });
+
+      this.httpSub.add(sub);
+    }
+  }
+
+  defaultRange() {
+    const fromDate = new Date();
+    fromDate.setHours(new Date().getHours() - AppConstants.sensorsHoursAgo);
+    const sub = this.deviceService.getSensorData(this.deviceId, this.sensor, fromDate)
+      .subscribe((resp: ChartData[]) => {
+        if (resp && resp.length > 0) {
+          console.log(resp);
+          this.chart.data = resp;
+        }
+      });
+    this.httpSub.add(sub);
+  }
+
   ngAfterViewInit() {
     this.zone.runOutsideAngular(() => {
       let chart = am4core.create("chartdiv", am4charts.XYChart);
 
       chart.paddingRight = 20;
 
-      const sub = this.deviceService.getSensorData(this.deviceId, this.sensor)
+      const fromDate = new Date();
+      fromDate.setHours(new Date().getHours() - AppConstants.sensorsHoursAgo);
+      const sub = this.deviceService.getSensorData(this.deviceId, this.sensor, fromDate)
         .subscribe((resp: ChartData[]) => {
 
           chart.data = resp;
@@ -78,8 +112,10 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
           bullet.isMeasured = false;
 
           series.events.on("validated", () => {
-            bullet.moveTo(series.dataItems.last.point);
-            bullet.validatePosition();
+            if (series.dataItems.length > 0) {
+              bullet.moveTo(series.dataItems.last.point);
+              bullet.validatePosition();
+            }
           })
 
         });

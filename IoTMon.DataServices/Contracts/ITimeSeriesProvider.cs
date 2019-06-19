@@ -10,6 +10,6 @@ namespace IoTMon.DataServices.Contracts
     {
         Task WriteAsync(PointMeasure data);
         Task WriteAsync(IEnumerable<PointMeasure> data);
-        Task<IEnumerable<Models.AMQP.Message>> QueryAsync(Guid deviceId, string sensor, DateTime? from = null);
+        Task<IEnumerable<Models.AMQP.Message>> QueryAsync(Guid deviceId, string sensor, DateTime? from = null, DateTime? to = null);
     }
 }

@@ -26,6 +26,7 @@
     "@auth0/angular-jwt": "^2.1.0",
     "guid-typescript": "^1.0.9",
     "jwt-decode": "^2.2.0",
+    "ng-pick-datetime": "^7.0.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"

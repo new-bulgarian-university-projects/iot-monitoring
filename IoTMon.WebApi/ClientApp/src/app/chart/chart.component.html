@@ -1,6 +1,18 @@
-<mat-slide-toggle matTooltip="Visualize real time values" matTooltipClass="tooltip" class="live-toggle"
+<mat-slide-toggle matTooltip="Visualize real time values" matTooltipClass="tooltip" class="chart-element-offset"
   (change)="onChange($event)" [(ngModel)]="isLive">
   Live
 </mat-slide-toggle>
+
+<div *ngIf="!isLive">
+  <div class="chart-element-offset">
+    <p>
+      Range Selection:
+    </p>
+    <input placeholder="Date Time Range:" [max]="maxDate" [style.width]="'250px'" [(ngModel)]="dateTimeRange" [selectMode]="'range'"
+      [owlDateTimeTrigger]="dtRange1" [owlDateTime]="dtRange1" (dateTimeChange)="onRangeChange()">
+    <owl-date-time #dtRange1></owl-date-time>
+  </div>
+  <button class="chart-element-offset" mat-raised-button color="primary" (click)="defaultRange()">Default</button>
+</div>
 
 <div id="chartdiv" style="width: 100%; height: 500px"></div>

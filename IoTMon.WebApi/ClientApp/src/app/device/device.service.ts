@@ -20,8 +20,15 @@ export class DeviceService {
     this.onDelete = new Subject<string>();
   }
 
-  getSensorData(deviceId: string, sensor: string): Observable<ChartData[]> {
-    return this.httpClient.get<ChartData[]>(this.baseUrl + `/devices/${deviceId}/sensors/${sensor}`)
+  getSensorData(deviceId: string, sensor: string, from?: Date, to?: Date): Observable<ChartData[]> {
+    let url = this.baseUrl + `/devices/${deviceId}/sensors/${sensor}`;
+    if (from) {
+      url += `?from=${from.toISOString()}`;
+    }
+    if (to) {
+      url += `&to=${to.toISOString()}`;
+    }
+    return this.httpClient.get<ChartData[]>(url)
       .pipe(map(
         r => r.map(
           ((x: ChartData) => {

@@ -4,6 +4,7 @@ export class AppConstants {
     public static readonly socket: string = "https://localhost:44311/live";
     
     public static readonly jwtKey: string = "jwtToken";
+    public static readonly sensorsHoursAgo = 1;
 
     public static readonly sensorIconMap: any = {
         'temp': ' wb_sunny',

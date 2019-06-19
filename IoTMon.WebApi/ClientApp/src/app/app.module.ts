@@ -8,7 +8,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from './material/material.module';
 import { ChartComponent } from './chart/chart.component';
 import { HttpClientModule } from '@angular/common/http';
-import { DeviceRoutingModule } from './device/device-routing.module';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { DeviceModule } from './device/device.module';
 import { AppConstants } from './helpers/constants';
 import { JwtModule } from '@auth0/angular-jwt';
@@ -34,6 +34,8 @@ export function tokenGetter() {
     FormsModule,
     LayoutModule,
     MaterialModule,
+    OwlNativeDateTimeModule,
+    OwlDateTimeModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter
