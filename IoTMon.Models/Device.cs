@@ -22,6 +22,8 @@ namespace IoTMon.Models
             get => this.deviceSensors;
             set => this.deviceSensors = value;
         }
+        public Guid UserId { get; set; }
+        public User User { get; set; }
 
         public bool IsActivated { get; set; }
         public bool IsDeleted { get; set; }

@@ -1,11 +1,14 @@
 ﻿using IoTMon.DataServices.Contracts;
 using IoTMon.Models.AMQP;
 using IoTMon.Models.DTO;
+using IoTMon.Models.Enums;
 using IoTMon.Models.TimeSeries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IoTMon.WebApi.Controllers
@@ -24,10 +27,17 @@ namespace IoTMon.WebApi.Controllers
         }
 
         [HttpGet()]
-        public ActionResult GetAllDevices()
+        public ActionResult GetPublicDevices()
         {
-            var devices = this.deviceService.GetDevices();
-            return Ok(devices);
+            try
+            {
+                var devices = this.deviceService.GetDevices(scope: ScopeEnum.Public);
+                return Ok(devices);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server Error on getting public devices");
+            }
         }
 
         [HttpGet("{deviceId:guid}/sensors/{sensor}")]
@@ -45,7 +55,13 @@ namespace IoTMon.WebApi.Controllers
         {
             try
             {
+
                 var device = this.deviceService.GetDeviceById(deviceId);
+                var userId = GetClaim(this.User, "id");
+                if (!device.IsPublic && device.UserId.ToString() != userId)
+                {
+                    return Unauthorized("This private device is not your belonging !");
+                }
                 return Ok(device);
             }
             catch (Exception)
@@ -55,6 +71,7 @@ namespace IoTMon.WebApi.Controllers
 
         }
 
+        [Authorize]
         [HttpPut("{deviceId:guid}")]
         public ActionResult UpdateDevice(DeviceDTO device)
         {
@@ -69,6 +86,7 @@ namespace IoTMon.WebApi.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost()]
         public ActionResult CreateDevice(DeviceDTO device)
         {
@@ -83,21 +101,63 @@ namespace IoTMon.WebApi.Controllers
             }
         }
 
+        private static string GetClaim(ClaimsPrincipal user, string claimName)
+        {
+            var claimsIdentity = user.Identity as ClaimsIdentity;
+            var idClaim = claimsIdentity?.FindFirst(claimName);
+            if (idClaim != null)
+            {
+                return idClaim.Value;
+            }
+            return null;
+        }
+
+
+
+        [Authorize]
         [HttpDelete("{deviceId:guid}")]
         public ActionResult DeleteDevice(Guid deviceId)
         {
             try
             {
-                var deleted = this.deviceService.DeleteDevice(deviceId);
+                var userId = GetClaim(this.User, "id");
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return this.BadRequest("User Id is not presented in JWT.");
+                }
+                var deleted = this.deviceService.DeleteDevice(deviceId, new Guid(userId));
                 if (deleted == null)
                 {
-                    return this.BadRequest("Could not find device with id " + deviceId);
+                    return this.BadRequest("Could not find YOUR device with id " + deviceId);
                 }
                 return this.Ok(deleted);
             }
             catch (Exception)
             {
                 return this.StatusCode(500, "Server Error");
+            }
+        }
+
+        [HttpGet("~/api/users/{userId:guid}")]
+        public IActionResult GetUserDevices(Guid userId)
+        {
+            try
+            {
+                var scope = ScopeEnum.Public;
+                string uId = GetClaim(this.User, "id");
+
+                if (uId != null && uId == userId.ToString())
+                {
+                    scope = ScopeEnum.All;
+                }
+
+                var devices = this.deviceService.GetDevices(scope: scope, userId: userId);
+                return Ok(devices);
+
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server Error on getting devices for user w/ ID " + userId);
             }
         }
 

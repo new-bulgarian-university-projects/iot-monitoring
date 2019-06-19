@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace IoTMon.Models.DTO
@@ -13,6 +14,8 @@ namespace IoTMon.Models.DTO
             this.FirstName = u.FirstName;
             this.LastName = u.LastName;
             this.Email = u.Email;
+
+            this.Devices = u.Devices.Select(d => new DeviceDTO(d));
         }
         public Guid Id { get; set; }
 
@@ -25,6 +28,8 @@ namespace IoTMon.Models.DTO
         [EmailAddress]
         [Required]
         public string Email { get; set; }
+
+        public IEnumerable<DeviceDTO> Devices { get; set; }
 
     }
 }

@@ -18,6 +18,7 @@ namespace IoTMon.Models.DTO
             this.IntervalInSeconds = device.IntervalInSeconds;
             this.IsActivated = device.IsActivated;
             this.IsPublic = device.IsPublic;
+            this.UserId = device.UserId;
 
             this.Sensors = device.DeviceSensors
                                  .Select(ds => new SensorDTO(ds.Sensor))
@@ -26,6 +27,8 @@ namespace IoTMon.Models.DTO
         public Guid Id { get; set; }
 
         public string DeviceName { get; set; }
+
+        public Guid UserId { get; set; }
 
         public int IntervalInSeconds { get; set; }
 

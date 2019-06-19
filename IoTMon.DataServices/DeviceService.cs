@@ -27,26 +27,36 @@ namespace IoTMon.DataServices
             return sensors;
         }
 
-        public IEnumerable<DeviceDTO> GetDevices(StatusEnum status = StatusEnum.All, ScopeEnum scope = ScopeEnum.All)
+        public IEnumerable<DeviceDTO> GetDevices(
+            StatusEnum status = StatusEnum.All,
+            ScopeEnum scope = ScopeEnum.All,
+            Guid? userId = null)
         {
-            IQueryable<Device> query = this.dbContext.Devices
+            IQueryable<Device> query;
+
+            if (userId.HasValue)
+            {
+                query = this.dbContext.Devices
+                    .Where(d => d.UserId == userId.Value);
+            }
+
+            query = this.dbContext.Devices
                 .Where(d => d.IsDeleted == false);
 
             if (status == StatusEnum.Deactivated)
             {
                 query = query.Where(d => d.IsActivated == false);
             }
-            else if(status == StatusEnum.Activated)
+            else if (status == StatusEnum.Activated)
             {
                 query = query.Where(d => d.IsActivated == true);
             }
-
 
             if (scope == ScopeEnum.Private)
             {
                 query = query.Where(d => d.IsPublic == false);
             }
-            else if(scope == ScopeEnum.Public)
+            else if (scope == ScopeEnum.Public)
             {
                 query = query.Where(d => d.IsPublic == true);
             }
@@ -85,10 +95,11 @@ namespace IoTMon.DataServices
             return new DeviceDTO(newDevice);
         }
 
-        public DeviceDTO DeleteDevice(Guid deviceId)
+        public DeviceDTO DeleteDevice(Guid deviceId, Guid userId)
         {
-            var device = this.dbContext.Devices.SingleOrDefault(d => d.Id == deviceId);
-            if(device == null)
+            var device = this.dbContext.Devices
+                .SingleOrDefault(d => (d.Id == deviceId) && (d.UserId == userId));
+            if (device == null)
             {
                 return null;
             }
@@ -108,7 +119,7 @@ namespace IoTMon.DataServices
                         .Single(d => d.Id == deviceId);
 
             return new DeviceDTO(device);
-        
+
         }
 
         public DeviceDTO UpdateDevice(DeviceDTO device)
@@ -119,7 +130,7 @@ namespace IoTMon.DataServices
             }
 
             var target = this.dbContext.Devices.Single(d => d.Id == device.Id);
-            if(target != null)
+            if (target != null)
             {
                 target.IntervalInSeconds = device.IntervalInSeconds;
                 target.IsPublic = device.IsPublic;
