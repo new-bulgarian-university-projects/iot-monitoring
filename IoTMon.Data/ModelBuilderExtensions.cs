@@ -157,7 +157,8 @@ namespace IoTMon.Data
                     IntervalInSeconds = 3,
                     IsActivated = true,
                     IsPublic = false,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    UserId = new Guid("c0961b4f-466c-4844-bd95-9f7bfa62cc7d")
                 },
 
                 new Device()
@@ -167,7 +168,8 @@ namespace IoTMon.Data
                     IntervalInSeconds = 2,
                     IsActivated = true,
                     IsPublic = true,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    UserId = new Guid("c0961b4f-466c-4844-bd95-9f7bfa62cc7d")
                 },
 
                 new Device()
@@ -177,7 +179,8 @@ namespace IoTMon.Data
                     IntervalInSeconds = 5,
                     IsActivated = true,
                     IsPublic = false,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    UserId = new Guid("c0961b4f-466c-4844-bd95-9f7bfa62cc7d")
                 },
             };
 

@@ -45,6 +45,12 @@ namespace IoTMon.Data
                     v => v.ToString(),
                     v => (ValueTypeEnum)Enum.Parse(typeof(ValueTypeEnum), v));
 
+            // required
+            modelBuilder.Entity<Device>()
+                .HasOne(d => d.User)
+                .WithMany(u => u.Devices)
+                .IsRequired();
+
             // uniques
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)

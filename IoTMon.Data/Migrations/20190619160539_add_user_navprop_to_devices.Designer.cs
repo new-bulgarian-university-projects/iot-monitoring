@@ -4,14 +4,16 @@ using IoTMon.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IoTMon.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190619160539_add_user_navprop_to_devices")]
+    partial class add_user_navprop_to_devices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,8 +63,7 @@ namespace IoTMon.Data.Migrations
 
                     b.Property<bool>("IsPublic");
 
-                    b.Property<Guid?>("UserId")
-                        .IsRequired();
+                    b.Property<Guid?>("UserId");
 
                     b.HasKey("Id");
 
@@ -312,8 +313,7 @@ namespace IoTMon.Data.Migrations
                 {
                     b.HasOne("IoTMon.Models.User", "User")
                         .WithMany("Devices")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("IoTMon.Models.DeviceSensor", b =>
