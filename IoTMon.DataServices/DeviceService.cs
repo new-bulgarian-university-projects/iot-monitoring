@@ -110,5 +110,25 @@ namespace IoTMon.DataServices
             return new DeviceDTO(device);
         
         }
+
+        public DeviceDTO UpdateDevice(DeviceDTO device)
+        {
+            if (device == null)
+            {
+                throw new ArgumentNullException(nameof(device));
+            }
+
+            var target = this.dbContext.Devices.Single(d => d.Id == device.Id);
+            if(target != null)
+            {
+                target.IntervalInSeconds = device.IntervalInSeconds;
+                target.IsPublic = device.IsPublic;
+                target.IsActivated = device.IsActivated;
+
+                this.dbContext.Devices.Update(target);
+                this.dbContext.SaveChanges();
+            }
+            return new DeviceDTO(target);
+        }
     }
 }

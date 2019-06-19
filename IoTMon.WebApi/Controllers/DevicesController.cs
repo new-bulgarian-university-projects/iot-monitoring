@@ -55,6 +55,20 @@ namespace IoTMon.WebApi.Controllers
 
         }
 
+        [HttpPut("{deviceId:guid}")]
+        public ActionResult UpdateDevice(DeviceDTO device)
+        {
+            try
+            {
+                var updated = this.deviceService.UpdateDevice(device);
+                return this.Ok(updated);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server Error on updating device with ID " + device.Id);
+            }
+        }
+
         [HttpPost()]
         public ActionResult CreateDevice(DeviceDTO device)
         {

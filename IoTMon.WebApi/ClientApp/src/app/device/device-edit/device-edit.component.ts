@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Device } from 'src/app/models/device.model';
 import { DeviceService } from '../device.service';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,7 @@ export class DeviceEditComponent implements OnInit, OnDestroy {
   private httpSub: Subscription = new Subscription();
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private deviceService: DeviceService) { }
 
   ngOnInit() {
@@ -28,7 +29,15 @@ export class DeviceEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.device);
+    if (confirm("Save changes ?")) {
+      const sub = this.deviceService.updateDevice(this.device)
+        .subscribe((resp: Device) => {
+          console.log('updated ', resp)
+          this.router.navigate(['/devices']);
+        }, err => console.log(err));
+
+      this.httpSub.add(sub);
+    }
   }
 
   ngOnDestroy() {

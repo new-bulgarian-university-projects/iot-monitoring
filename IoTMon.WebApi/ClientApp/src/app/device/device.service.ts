@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, Subscription, Subject } from 'rxjs';
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { Observable, Subscription, Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Device } from '../models/device.model';
 import { map, first } from 'rxjs/operators';
 import { ChartData } from '../models/chartData.model';
 import { AppConstants } from '../helpers/constants';
 import { Sensor } from '../models/sensor.model';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +49,11 @@ export class DeviceService {
       return null;
     }
     const url = AppConstants.baseUrl + `/devices/${deviceId}`;
-    return this.httpClient.delete<Device>(url).pipe(first()).subscribe(() => { this.onDelete.next(deviceId) });
+    return this.httpClient.delete<Device>(url)
+      .pipe(first())
+      .subscribe(() => {
+        this.onDelete.next(deviceId)
+      });
   }
 
   getAllSensors(): Observable<Sensor[]> {
@@ -63,6 +65,11 @@ export class DeviceService {
     return this.httpClient.get<Device>(url);
   }
 
+  updateDevice(device: Device): Observable<Device> {
+    const url = `${AppConstants.baseUrl}/devices/${device.id}`;
+    return this.httpClient.put<Device>(url, device);
+  }
+
   getAllDevices(): Observable<Device[]> {
     return this.httpClient.get<Device[]>(AppConstants.baseUrl + '/devices');
   }
@@ -70,5 +77,4 @@ export class DeviceService {
   getIcon(sensorLabel: string): string {
     return AppConstants.sensorIconMap[sensorLabel];
   }
-
 }
