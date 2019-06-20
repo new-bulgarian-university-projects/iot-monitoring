@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using RabbitMQ.Client;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,7 @@ namespace IoTMon.DataSimulator
         private static IModel channel;
         private static RabbitMQConfig rabbitMQConfig;
         private static List<Timer> timers = new List<Timer>();
+        private static Timer updateDevices;
 
         static void Main(string[] args)
         {
@@ -43,7 +45,7 @@ namespace IoTMon.DataSimulator
                 throw new ArgumentNullException("RabbitMQ");
             }
 
-            var devices = deviceService.GetDevices();
+
 
             var factory = new ConnectionFactory()
             {
@@ -57,16 +59,24 @@ namespace IoTMon.DataSimulator
             {
                 channel.QueueDeclare(rabbitMQConfig.QueueName, true, false, false, null);
 
-                foreach (var device in devices)
+                updateDevices = new Timer((_) =>
                 {
-                    foreach (var sensor in device.Sensors)
+                    timers.ForEach(t => t.Dispose());
+                    timers.Clear();
+                    var devices = deviceService.GetDevices();
+                    foreach (var device in devices)
                     {
-                        TimerState state = new TimerState(device, sensor);
-                        var timer = new Timer(Execute, state, 0, device.IntervalInSeconds * 1000);
+                        foreach (var sensor in device.Sensors)
+                        {
+                            TimerState state = new TimerState(device, sensor);
+                            var timer = new Timer(Execute, state, 0, device.IntervalInSeconds * 1000);
 
-                        timers.Add(timer);
+                            timers.Add(timer);
+                        }
                     }
-                }
+                    Console.WriteLine("---- Devices Updated ----");
+                }, null, 0, 30 * 1000);
+
                 Console.ReadLine();
             }
             DisposeServices();
@@ -104,7 +114,7 @@ namespace IoTMon.DataSimulator
 
             services.AddTransient<IDeviceService, DeviceService>();
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
-            
+
 
             rabbitMQConfig = Configuration.GetSection("RabbitMQ").Get<RabbitMQConfig>();
 
