@@ -21,13 +21,16 @@ namespace IoTMon.WebApi.Controllers
         private readonly IHubContext<ChartHub> hub;
         private readonly ITimeSeriesProvider influxDbClient;
         private readonly IDataManager dataManager;
-        public List<TimerManager> timers = new List<TimerManager>();
+        private readonly IDeviceService deviceService;
 
-        public ChartController(IHubContext<ChartHub> hub, ITimeSeriesProvider influxDbClient, IDataManager dataManager)
+
+        public ChartController(IHubContext<ChartHub> hub, ITimeSeriesProvider influxDbClient,
+            IDataManager dataManager, IDeviceService deviceService)
         {
-            this.hub = hub;
-            this.influxDbClient = influxDbClient;
-            this.dataManager = dataManager;
+            this.hub = hub ?? throw new ArgumentNullException(nameof(hub));
+            this.influxDbClient = influxDbClient ?? throw new ArgumentNullException(nameof(influxDbClient));
+            this.dataManager = dataManager ?? throw new ArgumentNullException(nameof(dataManager));
+            this.deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
         }
 
 
@@ -49,17 +52,26 @@ namespace IoTMon.WebApi.Controllers
                 return this.BadRequest("Connection ID is missing");
             }
 
+
             var filter = new SignalRFilter()
             {
                 DeviceId = deviceId,
-                Sensor = sensor
+                Sensor = sensor,
+                From = DateTime.Now
             };
+
+            var device = this.deviceService.GetDeviceById(deviceId);
+            //var dt = DateTime.Now;
             // refactor using a Timer Factory
-            var timerManager = new TimerManager(async () =>
-            {
-                var collection = await dataManager.Get(filter);
-                await hub.Clients.All.SendAsync("transferchartdata", collection);
-            });
+            Func<DateTime, Task<DateTime?>> func = async (dt) =>
+                {
+                    filter.From = dt;
+                    var collection = await dataManager.Get(filter);
+                    await hub.Clients.All.SendAsync("transferchartdata", collection);
+                    return collection.LastOrDefault()?.Date;
+                };
+            var timerManager = new TimerManager(device.IntervalInSeconds, func);
+
             Utils.timers[connId] = timerManager;
 
             return Ok(new { Message = "Request Completed" });

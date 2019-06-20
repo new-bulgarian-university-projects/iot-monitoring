@@ -4,6 +4,7 @@ using IoTMon.Models.TimeSeries;
 using IoTMon.Services.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,11 @@ namespace IoTMon.DataServices
             {
                 throw new ArgumentNullException(nameof(filter));
             }
-
-            var result = await influxDbClient.QueryAsync(filter.DeviceId, filter.Sensor, DateTime.Now.AddSeconds(-2));
+            var result = await influxDbClient.QueryAsync(filter.DeviceId, filter.Sensor, filter.From);
 
             var processed = this.dataParser.ParseMessages(filter.Sensor, result);
             return processed;
         }
+
     }
 }

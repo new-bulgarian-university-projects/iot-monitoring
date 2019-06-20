@@ -48,7 +48,8 @@ namespace IoTMon.DataServices
             if (from.HasValue)
             {
                 query += " AND time > '@From'";
-                qf.From = from.Value.AddSeconds(-3).ToString("yyyy-MM-ddTHH:mm:ssZ");
+                // for signalR connection, add a seconds, to skip the lastMeasure, from previous call
+                qf.From = from.Value.AddSeconds(1).ToString("yyyy-MM-ddTHH:mm:ssZ");
             }
             if (to.HasValue)
             {

@@ -6,6 +6,6 @@ namespace IoTMon.Services.Contracts
 {
     public interface ITimeManager
     {
-        void Execute(object stateInfo);
+        void ExecuteAsync(object stateInfo);
     }
 }
