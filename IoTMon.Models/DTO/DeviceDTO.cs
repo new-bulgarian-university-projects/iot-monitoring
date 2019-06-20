@@ -19,7 +19,7 @@ namespace IoTMon.Models.DTO
             this.IsActivated = device.IsActivated;
             this.IsPublic = device.IsPublic;
             this.UserId = device.UserId;
-            this.UserEmail = device.User.Email;
+            this.UserEmail = device.User?.Email;
 
             this.Sensors = device.DeviceSensors
                                  .Select(ds => new SensorDTO(ds.Sensor))

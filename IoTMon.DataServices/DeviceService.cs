@@ -70,7 +70,7 @@ namespace IoTMon.DataServices
             return devices;
         }
 
-        public DeviceDTO CreateDevice(DeviceDTO device)
+        public DeviceDTO CreateDevice(DeviceDTO device, Guid userId)
         {
             var newDevice = new Device()
             {
@@ -79,7 +79,8 @@ namespace IoTMon.DataServices
                 IsPublic = device.IsPublic,
                 IsActivated = device.IsActivated,
                 IsDeleted = false,
-                IntervalInSeconds = device.IntervalInSeconds
+                IntervalInSeconds = device.IntervalInSeconds,
+                UserId = userId
             };
 
             foreach (var sensorId in device.SensorIds)
@@ -132,7 +133,10 @@ namespace IoTMon.DataServices
                 throw new ArgumentNullException(nameof(device));
             }
 
-            var target = this.dbContext.Devices.Single(d => d.Id == device.Id);
+            var target = this.dbContext.Devices
+                .Include(d => d.User)
+                .Single(d => d.Id == device.Id);
+
             if (target != null)
             {
                 target.IntervalInSeconds = device.IntervalInSeconds;

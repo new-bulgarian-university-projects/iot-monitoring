@@ -101,7 +101,12 @@ namespace IoTMon.WebApi.Controllers
         {
             try
             {
-                var result = this.deviceService.CreateDevice(device);
+                var userId = GetClaim(this.User, "id");
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return this.BadRequest("user id is not present in JWT");
+                }
+                var result = this.deviceService.CreateDevice(device, new Guid(userId));
                 return this.Ok(result);
             }
             catch (Exception)

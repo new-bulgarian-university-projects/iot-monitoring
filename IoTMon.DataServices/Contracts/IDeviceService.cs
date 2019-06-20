@@ -14,7 +14,7 @@ namespace IoTMon.DataServices.Contracts
             Guid? userId = null);
         DeviceDTO GetDeviceById(Guid deviceId);
         IEnumerable<SensorDTO> GetSensors();
-        DeviceDTO CreateDevice(DeviceDTO device);
+        DeviceDTO CreateDevice(DeviceDTO device, Guid userId);
         DeviceDTO UpdateDevice(DeviceDTO device);
         DeviceDTO DeleteDevice(Guid deviceId, Guid userId);
     }
