@@ -156,7 +156,7 @@ namespace IoTMon.WebApi.Controllers
             }
         }
 
-        [HttpGet("~/api/users/{userId:guid}")]
+        [HttpGet("~/api/users/{userId:guid}/devices")]
         public IActionResult GetUserDevices(Guid userId)
         {
             try

@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { DeviceService } from '../device.service';
 import { Device } from 'src/app/models/device.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
@@ -28,6 +28,7 @@ export class DeviceListComponent implements OnInit, OnDestroy {
   }
   expandedElement: Device | null;
   dataSource: Device[];
+  @Input() userId: string = null;
 
   private httpSub = new Subscription();
 
@@ -61,11 +62,17 @@ export class DeviceListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const sub = this.deviceService.getAllDevices()
-      .subscribe((resp) => {
-        console.log("devices ", resp);
-        this.dataSource = resp
-      }, err => console.log(err));
+    let devicesObs: Observable<Device[]>;
+    if (this.userId) {
+      devicesObs = this.deviceService.getDevicesForUser(this.userId);
+    } else {
+      devicesObs = this.deviceService.getAllDevices();
+    }
+
+    const sub = devicesObs.subscribe((resp) => {
+      console.log("devices ", resp);
+      this.dataSource = resp
+    }, err => console.log(err));
 
     const subjectSub = this.deviceService.onDelete
       .subscribe((deviceId) => {

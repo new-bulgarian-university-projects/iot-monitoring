@@ -40,7 +40,6 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
       const sub = this.deviceService.getSensorData(this.deviceId, this.sensor, this.dateTimeRange[0], this.dateTimeRange[1])
         .subscribe((resp: ChartData[]) => {
           if (resp && resp.length > 0) {
-            console.log(resp);
             this.chart.data = resp;
           }
           else {
@@ -58,7 +57,6 @@ export class ChartComponent implements AfterViewInit, OnInit, OnDestroy {
     const sub = this.deviceService.getSensorData(this.deviceId, this.sensor, fromDate)
       .subscribe((resp: ChartData[]) => {
         if (resp && resp.length > 0) {
-          console.log(resp);
           this.chart.data = resp;
         }
       });

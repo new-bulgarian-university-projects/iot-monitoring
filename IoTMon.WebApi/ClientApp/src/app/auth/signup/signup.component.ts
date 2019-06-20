@@ -3,7 +3,7 @@ import { RegisterUser } from '../models/registerUser.model';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { User } from '../models/user.model';
+import { SignupUser } from '../models/signupUser.model';
 
 @Component({
   selector: 'app-signup',
@@ -24,7 +24,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     console.log(this.user);
     try {
       const httpSub = this.authService.signupUser(this.user)
-        .subscribe((user: User) => {
+        .subscribe((user: SignupUser) => {
           console.log(`${user.email} created successfully `);
           this.router.navigate(['signin']);
         }, err => console.log(err));

@@ -15,6 +15,11 @@ import { DeviceEditComponent } from './device-edit/device-edit.component';
     FormsModule,
     DeviceRoutingModule,
     MaterialModule
+  ],
+  exports: [
+    DeviceListComponent,
+    DeviceNewComponent,
+    DeviceEditComponent
   ]
 })
 export class DeviceModule { }

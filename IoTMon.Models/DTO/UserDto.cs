@@ -15,7 +15,7 @@ namespace IoTMon.Models.DTO
             this.LastName = u.LastName;
             this.Email = u.Email;
 
-            this.Devices = u.Devices.Select(d => new DeviceDTO(d));
+            this.Devices = u.Devices?.Select(d => new DeviceDTO(d));
         }
         public Guid Id { get; set; }
 

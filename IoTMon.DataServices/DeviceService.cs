@@ -39,9 +39,12 @@ namespace IoTMon.DataServices
                 query = this.dbContext.Devices
                     .Where(d => d.UserId == userId.Value);
             }
+            else
+            {
+                query = this.dbContext.Devices;
+            }
 
-            query = this.dbContext.Devices
-                .Where(d => d.IsDeleted == false);
+            query = query.Where(d => d.IsDeleted == false);
 
             if (status == StatusEnum.Deactivated)
             {

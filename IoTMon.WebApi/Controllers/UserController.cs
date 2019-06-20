@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IoTMon.Data;
 using IoTMon.DataServices.Contracts;
 using IoTMon.Models.DTO;
 using IoTMon.Services.Contracts;
@@ -16,11 +17,13 @@ namespace IoTMon.WebApi.Controllers
     {
         private readonly IUserService userService;
         private readonly IAuthService jwtAuthService;
+        private readonly ApplicationDbContext dbContext;
 
-        public UserController(IUserService userService, IAuthService jwtAuthService)
+        public UserController(IUserService userService, IAuthService jwtAuthService, ApplicationDbContext dbContext)
         {
             this.userService = userService ?? throw new ArgumentNullException("userService");
             this.jwtAuthService = jwtAuthService ?? throw new ArgumentNullException("jwtAuthService");
+            this.dbContext = dbContext ?? throw new ArgumentNullException("dbContext");
         }
 
         [HttpPost("signin")]
@@ -58,6 +61,22 @@ namespace IoTMon.WebApi.Controllers
             {
                 return new BadRequestObjectResult("Server error !");
             }
+        }
+
+        [HttpGet("{userId:guid}")]
+        public IActionResult GetUser(Guid userId)
+        {
+            try
+            {
+                var user = this.dbContext.Users.First(u => u.Id == userId);
+                var userDto = new UserDto(user);
+                return Ok(userDto);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server error on getting user with id " + userId);
+            }
+
         }
     }
 }

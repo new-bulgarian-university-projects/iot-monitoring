@@ -1,3 +1,4 @@
-<p>
-  user works!
-</p>
+<div *ngIf="user">
+  <mat-toolbar> {{user.firstName + ' ' + user.lastName}}'s devices</mat-toolbar>
+  <app-device-list [userId]='userId'></app-device-list>
+</div>

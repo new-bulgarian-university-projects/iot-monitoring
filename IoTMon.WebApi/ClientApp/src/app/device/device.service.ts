@@ -74,6 +74,14 @@ export class DeviceService {
     return this.httpClient.get<Device[]>(AppConstants.baseUrl + '/devices');
   }
 
+  getDevicesForUser(userId: string): Observable<Device[]> {
+    if(!userId){
+      return null;
+    }
+
+    return this.httpClient.get<Device[]>(AppConstants.baseUrl + `/users/${userId}/devices`);
+  }
+
   getIcon(sensorLabel: string): string {
     return AppConstants.sensorIconMap[sensorLabel];
   }

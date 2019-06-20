@@ -36,7 +36,7 @@
           <mat-action-list *ngIf="authService.isAuthenticated() && isOwnersSensor(element)" class='table-actions'>
             <span class="example-element-description-attribution"> Device Actions </span>
             <div>
-              <button mat-raised-button color="primary" [routerLink]="[element.id, 'edit']">Edit</button>
+              <button mat-raised-button color="primary" [routerLink]="['/devices',element.id, 'edit']">Edit</button>
               <button mat-raised-button color="warn" (click)="onDelete(element)">Delete</button>
             </div>
           </mat-action-list>
@@ -54,4 +54,4 @@
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
   </table>
 </div>
-<button mat-raised-button color="accent" class="element-offset" [routerLink]="['/devices','new']">New Device</button>
+<button *ngIf="authService.isAuthenticated()" mat-raised-button color="accent" class="element-offset" [routerLink]="['/devices','new']">New Device</button>
