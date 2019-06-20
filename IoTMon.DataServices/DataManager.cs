@@ -1,6 +1,7 @@
 ﻿using IoTMon.DataServices.Contracts;
 using IoTMon.Models.SignalR;
 using IoTMon.Models.TimeSeries;
+using IoTMon.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +10,28 @@ using System.Threading.Tasks;
 
 namespace IoTMon.DataServices
 {
-    public class DataManager
+    public class DataManager : IDataManager
     {
-        private ITimeSeriesProvider influxDbClient;
+        private readonly ITimeSeriesProvider influxDbClient;
+        private readonly IDataParser dataParser;
         public DateTime LastSent { get; set; }
 
-        public DataManager(ITimeSeriesProvider influxDbClient)
+        public DataManager(ITimeSeriesProvider influxDbClient, IDataParser dataParser)
         {
-            this.influxDbClient = influxDbClient;
+            this.influxDbClient = influxDbClient ?? throw new ArgumentNullException(nameof(influxDbClient));
+            this.dataParser = dataParser ?? throw new ArgumentNullException(nameof(dataParser));
         }
 
-        public async Task<IEnumerable<ChartData>> Get(object objectState)
+        public async Task<IEnumerable<ChartData>> Get(SignalRFilter filter)
         {
-            var filter = (SignalRFilter)objectState;
-            this.LastSent = DateTime.Now;
-            // get data from now for that sensor
-            var result = await influxDbClient.QueryAsync(filter.DeviceId, filter.Sensor, this.LastSent);
-            var processed = result.Select(r => new ChartData(r.Time, Convert.ToDouble(r.Value))).ToList();
+            if (filter == null)
+            {
+                throw new ArgumentNullException(nameof(filter));
+            }
+
+            var result = await influxDbClient.QueryAsync(filter.DeviceId, filter.Sensor, DateTime.Now.AddSeconds(-2));
+
+            var processed = this.dataParser.ParseMessages(filter.Sensor, result);
             return processed;
         }
     }

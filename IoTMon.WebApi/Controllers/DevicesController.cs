@@ -3,6 +3,7 @@ using IoTMon.Models.AMQP;
 using IoTMon.Models.DTO;
 using IoTMon.Models.Enums;
 using IoTMon.Models.TimeSeries;
+using IoTMon.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,11 +20,13 @@ namespace IoTMon.WebApi.Controllers
     {
         private readonly ITimeSeriesProvider influxDb;
         private readonly IDeviceService deviceService;
+        private readonly IDataParser dataParser;
 
-        public DevicesController(ITimeSeriesProvider influxDb, IDeviceService deviceService)
+        public DevicesController(ITimeSeriesProvider influxDb, IDeviceService deviceService, IDataParser dataParser)
         {
             this.influxDb = influxDb ?? throw new ArgumentNullException(nameof(influxDb));
             this.deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
+            this.dataParser = dataParser ?? throw new ArgumentNullException(nameof(dataParser));
         }
 
         [HttpGet()]
@@ -46,7 +49,8 @@ namespace IoTMon.WebApi.Controllers
             [FromQuery(Name = "to")] DateTime? to)
         {
             var result = await influxDb.QueryAsync(deviceId, sensor, from, to);
-            var processed = result.Select(r => new ChartData(r.Time, Convert.ToDouble(r.Value))).ToList();
+
+            var processed = this.dataParser.ParseMessages(sensor, result);
             return Ok(processed);
         }
 
@@ -138,7 +142,7 @@ namespace IoTMon.WebApi.Controllers
                 if (string.IsNullOrWhiteSpace(userId))
                 {
                     return this.BadRequest("User Id is not presented in JWT.");
-                } 
+                }
                 var deleted = this.deviceService.DeleteDevice(deviceId, new Guid(userId));
                 if (deleted == null)
                 {

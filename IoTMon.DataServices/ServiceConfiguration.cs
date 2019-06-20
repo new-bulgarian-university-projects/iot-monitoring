@@ -13,11 +13,13 @@ namespace IoTMon.DataServices
     {
         public static void AddDataServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var influxDbConfig = configuration.GetSection("InfluxDb").Get<InfluxDbConfig>();
+            var influxDbConfig = configuration.GetSection("InfluxDb")
+                .Get<InfluxDbConfig>();
 
-            services.AddSingleton<ITimeSeriesProvider>(ts => new InfluxDbProvider(influxDbConfig));
+            services.AddScoped<ITimeSeriesProvider>(ts => new InfluxDbProvider(influxDbConfig));
             services.AddScoped<IDeviceService, DeviceService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDataManager, DataManager>();
         }
     }
 }

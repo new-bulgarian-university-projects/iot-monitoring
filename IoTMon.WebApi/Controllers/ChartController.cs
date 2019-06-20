@@ -18,14 +18,16 @@ namespace IoTMon.WebApi.Controllers
     [ApiController]
     public class ChartController : ControllerBase
     {
-        private IHubContext<ChartHub> hub;
-        private ITimeSeriesProvider influxDbClient;
+        private readonly IHubContext<ChartHub> hub;
+        private readonly ITimeSeriesProvider influxDbClient;
+        private readonly IDataManager dataManager;
         public List<TimerManager> timers = new List<TimerManager>();
 
-        public ChartController(IHubContext<ChartHub> hub, ITimeSeriesProvider influxDbClient)
+        public ChartController(IHubContext<ChartHub> hub, ITimeSeriesProvider influxDbClient, IDataManager dataManager)
         {
             this.hub = hub;
             this.influxDbClient = influxDbClient;
+            this.dataManager = dataManager;
         }
 
 
@@ -50,14 +52,12 @@ namespace IoTMon.WebApi.Controllers
             var filter = new SignalRFilter()
             {
                 DeviceId = deviceId,
-                Sensor = sensor,
-                From = (DateTime.Now - TimeSpan.FromSeconds(2))
+                Sensor = sensor
             };
-            var dManager = new DataManager(this.influxDbClient);
             // refactor using a Timer Factory
             var timerManager = new TimerManager(async () =>
             {
-                var collection = await dManager.Get(filter);
+                var collection = await dataManager.Get(filter);
                 await hub.Clients.All.SendAsync("transferchartdata", collection);
             });
             Utils.timers[connId] = timerManager;
@@ -71,8 +71,5 @@ namespace IoTMon.WebApi.Controllers
         {
             return Ok(Utils.timers);
         }
-
-        // TODO: when stopping connection hit an endpodin to clear the timers
-
     }
 }

@@ -15,6 +15,7 @@ namespace IoTMon.Services
 
 
             services.AddScoped<IAuthService>(a => new AuthService(authParams));
+            services.AddSingleton<IDataParser, DataParser>();
         }
     }
 }
