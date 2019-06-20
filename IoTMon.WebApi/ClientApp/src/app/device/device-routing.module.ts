@@ -6,6 +6,11 @@ import { DeviceEditComponent } from './device-edit/device-edit.component';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/devices',
+    pathMatch: 'full'
+  },
+  {
     path: 'devices',
     component: DeviceListComponent
   },

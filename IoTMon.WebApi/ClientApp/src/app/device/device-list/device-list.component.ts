@@ -19,6 +19,13 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class DeviceListComponent implements OnInit, OnDestroy {
   columnsToDisplay = ['deviceName', 'id', 'isActivated', 'isPublic', 'userId'];
+  tableHeaderMapping = {
+    'deviceName': 'Device Name',
+    'id': "Device ID",
+    'isActivated': 'On / Off',
+    'isPublic': 'Public',
+    'userId': 'Owner'
+  }
   expandedElement: Device | null;
   dataSource: Device[];
 
