@@ -24,7 +24,12 @@ export class NavbarComponent {
     return this.authService.isAuthenticated();
   }
 
-  getUsername(): string {
-    return this.authService.getUserInfo()['firstName'];
+  getUserInfo(key: string): string {
+    const userInfo = this.authService.getUserInfo();
+    if (userInfo && userInfo[key]) {
+      return userInfo[key];
+    }
+
+    return null;
   }
 }

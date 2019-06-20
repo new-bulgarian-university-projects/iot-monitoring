@@ -20,8 +20,8 @@
       <!-- This fills the remaining space of the current row -->
       <span class="fill-remaining-space"></span>
       <ng-template [ngIf]="isAuthenticated()">
-        <button mat-button color="accent" [routerLink]="['/', 'users', getUsername()]">
-          <mat-icon>account_box</mat-icon> &nbsp; {{getUsername()}}
+        <button mat-button color="accent" [routerLink]="['/', 'user', getUserInfo('id')]">
+          <mat-icon>account_box</mat-icon> &nbsp; {{getUserInfo('firstName')}}
         </button>
 
         <button mat-button (click)="authService.logout()">

@@ -10,6 +10,7 @@ export class Device {
     public intervalInSeconds: number;
     public isActivated: boolean;
     public isPublic: boolean;
+    public userId: string;
 
     public sensors: Sensor[];
     public sensorIds: string[];

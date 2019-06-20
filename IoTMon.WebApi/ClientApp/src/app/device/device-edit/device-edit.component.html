@@ -24,14 +24,14 @@
           </div>
           <div class="row">
             <mat-slide-toggle matTooltip="Turn on/off your sensor" name="isActivated" matTooltipClass="tooltip"
-              class="chart-element-offset" [(ngModel)]="device.isActivated">
+              class="element-offset" [(ngModel)]="device.isActivated">
               <span *ngIf="device.isActivated">On (activated)</span>
               <span *ngIf="!device.isActivated">Off (deactivated)</span>
             </mat-slide-toggle>
           </div>
           <div class=" row">
             <mat-slide-toggle matTooltip="Visibility of your sensors data" name="isPublic" matTooltipClass="tooltip"
-              class="chart-element-offset" [(ngModel)]="device.isPublic">
+              class="element-offset" [(ngModel)]="device.isPublic">
               <span *ngIf="device.isPublic">Public</span>
               <span *ngIf="!device.isPublic">Private</span>
             </mat-slide-toggle>

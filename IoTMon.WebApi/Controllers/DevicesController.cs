@@ -77,6 +77,15 @@ namespace IoTMon.WebApi.Controllers
         {
             try
             {
+                var userId = GetClaim(this.User, "id");
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return this.BadRequest("User Id is not presented in JWT.");
+                }
+                if (userId != device.UserId.ToString())
+                {
+                    return this.Unauthorized("Device is not your belonging !");
+                }
                 var updated = this.deviceService.UpdateDevice(device);
                 return this.Ok(updated);
             }
@@ -124,7 +133,7 @@ namespace IoTMon.WebApi.Controllers
                 if (string.IsNullOrWhiteSpace(userId))
                 {
                     return this.BadRequest("User Id is not presented in JWT.");
-                }
+                } 
                 var deleted = this.deviceService.DeleteDevice(deviceId, new Guid(userId));
                 if (deleted == null)
                 {

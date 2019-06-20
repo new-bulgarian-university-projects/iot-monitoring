@@ -61,7 +61,9 @@ namespace IoTMon.DataServices
                 query = query.Where(d => d.IsPublic == true);
             }
 
-            var devices = query.Include(d => d.DeviceSensors)
+            var devices = query
+                .Include(d => d.User)
+                .Include(d => d.DeviceSensors)
                 .ThenInclude(r => r.Sensor)
                 .Select(d => new DeviceDTO(d)).ToList();
 
@@ -114,6 +116,7 @@ namespace IoTMon.DataServices
         public DeviceDTO GetDeviceById(Guid deviceId)
         {
             var device = this.dbContext.Devices
+                        .Include(d => d.User)
                         .Include(d => d.DeviceSensors)
                         .ThenInclude(ds => ds.Sensor)
                         .Single(d => d.Id == deviceId);
