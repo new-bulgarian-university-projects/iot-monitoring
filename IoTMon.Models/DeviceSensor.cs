@@ -11,5 +11,8 @@ namespace IoTMon.Models
 
         public Guid SensorId { get; set; }
         public Sensor Sensor { get; set; }
+
+        public double? MinValue { get; set; }
+        public double? MaxValue { get; set; }
     }
 }

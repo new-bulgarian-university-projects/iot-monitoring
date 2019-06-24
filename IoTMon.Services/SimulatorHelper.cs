@@ -16,7 +16,7 @@ namespace IoTMon.Services
             {"o3", new SensorRange(0, 100) },
             {"so2", new SensorRange(0, 40) },
             {"temp", new SensorRange(-40, 80) },
-            {"hum", new SensorRange(0,130) },
+            {"hum", new SensorRange(0, 100) },
             {"sound", new SensorRange(0,150) },
             {"openclose", new SensorRange(0,1) },
         };
@@ -39,7 +39,7 @@ namespace IoTMon.Services
             }
 
             SensorRange ranges = sensorRules[sensor];
-            var generated = Math.Round(random.NextDouble() * (ranges.Max - ranges.Min) + ranges.Min, 4);
+            var generated = Math.Round(random.NextDouble() * (ranges.Max - ranges.Min) + ranges.Min, 2);
             if (sensor == "openclose")
             {
                 return generated >= 0.5;

@@ -42,14 +42,26 @@
               Sensors
             </h4>
           </mat-grid-tile-header>
-          <mat-grid-list cols="2" rowHeight="50px">
-            <br>
+          <mat-grid-list cols="2" rowHeight="100px">
             <mat-grid-tile *ngFor=" let sensor of availableSensors">
-              <mat-checkbox class="text-inside-grid" [(ngModel)]="sensor.checked" [value]="sensor.id" [id]=" sensor.id"
-                matTooltipPosition="right" [matTooltip]="sensor.description" matTooltipClass="tooltip"
-                (change)="onChange()" name="{{sensor.id}}">
-                {{sensor.friendlyLabel}} - {{sensor.measurementUnit}}
-              </mat-checkbox>
+              <mat-list>
+                <mat-list-item>
+                  <mat-checkbox class="text-inside-grid" [(ngModel)]="sensor.checked" [value]="sensor.id"
+                    [id]=" sensor.id" matTooltipPosition="right" [matTooltip]="sensor.description"
+                    matTooltipClass="tooltip" (change)="onChange()" name="{{sensor.id}}">
+                    {{sensor.friendlyLabel}} - {{sensor.measurementUnit}}
+                  </mat-checkbox>
+                </mat-list-item>
+                <mat-list-item *ngIf="sensor.checked" class="limits">
+                  <mat-form-field>
+                    <input matInput type="number" placeholder="min" value="">
+                  </mat-form-field>
+                  &nbsp;
+                  <mat-form-field>
+                    <input matInput type="number" placeholder="max" value="">
+                  </mat-form-field>
+                </mat-list-item>
+              </mat-list>
             </mat-grid-tile>
           </mat-grid-list>
         </div>
