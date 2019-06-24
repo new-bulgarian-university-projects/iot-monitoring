@@ -186,7 +186,11 @@ namespace IoTMon.Data
 
             var deviceSensors = new DeviceSensor[]
             {
-                new DeviceSensor() {DeviceId = devices[0].Id, SensorId = sensors[0].Id},
+                new DeviceSensor() {
+                    DeviceId = devices[0].Id,
+                    SensorId = sensors[0].Id,
+                    MinValue = 5,
+                    MaxValue = 50},
                 new DeviceSensor() {DeviceId = devices[0].Id, SensorId = sensors[1].Id},
 
                 new DeviceSensor() {DeviceId = devices[1].Id, SensorId = sensors[5].Id},
