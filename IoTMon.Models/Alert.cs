@@ -22,6 +22,7 @@ namespace IoTMon.Models
         public DateTime? AlertClosed { get; set; }
 
         public ValueTypeEnum ValueType { get; set; }
+        public AlertTypeEnum AlertType { get; set; }
         public string TriggeringValue { get; set; }
     }
 }

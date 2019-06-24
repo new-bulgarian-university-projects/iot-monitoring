@@ -45,6 +45,12 @@ namespace IoTMon.Data
                     v => v.ToString(),
                     v => (ValueTypeEnum)Enum.Parse(typeof(ValueTypeEnum), v));
 
+            modelBuilder.Entity<Alert>()
+                .Property(a => a.AlertType)
+                .HasConversion(
+                    t => t.ToString(),
+                    t => (AlertTypeEnum)Enum.Parse(typeof(AlertTypeEnum), t));
+
             // required
             modelBuilder.Entity<Device>()
                 .HasOne(d => d.User)
