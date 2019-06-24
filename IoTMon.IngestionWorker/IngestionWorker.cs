@@ -1,9 +1,11 @@
-﻿using IoTMon.DataServices;
+﻿using IoTMon.Data;
+using IoTMon.DataServices;
 using IoTMon.DataServices.Contracts;
 using IoTMon.Models.AMQP;
 using IoTMon.Models.TimeSeries;
 using IoTMon.Services;
 using IoTMon.Services.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -24,6 +26,7 @@ namespace IoTMon.IngestionWorker
         private static RabbitMQConfig rabbitMQConfig;
 
         private static ITimeSeriesProvider influxDb;
+        private static DbContextOptionsBuilder<ApplicationDbContext> dbOptions;
         private static ushort UnackedMessagesPerConsumer = 15;
 
         static void Main(string[] args)
@@ -55,6 +58,14 @@ namespace IoTMon.IngestionWorker
                     PointMeasure point = BuildPoint(message);
                     await influxDb.WriteAsync(point);
 
+
+                    using (var dbContext = new ApplicationDbContext(dbOptions.Options))
+                    {
+                        var alertService = new AlertService(dbContext);
+                        // check alerts
+                        alertService.CheckAlerts(message);
+
+                    }
                     channel.BasicAck(ea.DeliveryTag, false);
                 };
 
@@ -98,6 +109,9 @@ namespace IoTMon.IngestionWorker
         private static void RegisterServices(IConfiguration configuration)
         {
             var services = new ServiceCollection();
+            dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>();
+            dbOptions.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring"));
+
             services.AddDataServices(configuration);
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
 

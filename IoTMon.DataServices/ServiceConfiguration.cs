@@ -20,6 +20,7 @@ namespace IoTMon.DataServices
             services.AddScoped<IDeviceService, DeviceService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDataManager, DataManager>();
+            services.AddScoped<IAlertService, AlertService>();
         }
     }
 }
