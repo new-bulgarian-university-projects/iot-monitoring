@@ -34,10 +34,9 @@ namespace IoTMon.DataServices
             double? min = deviceSensor?.MinValue;
             double? max = deviceSensor?.MaxValue;
 
-            // last alert
             if (!min.HasValue && !max.HasValue)
             {
-                Console.WriteLine($"No alerts for {message.DeviceId} / {message.Sensor}");
+                //Console.WriteLine($"No alerts for {message.DeviceId} / {message.Sensor}");
                 return;
             }
 
@@ -57,7 +56,7 @@ namespace IoTMon.DataServices
                         {
                             Id = Guid.NewGuid(),
                             AlertStarted = message.Time,
-                            AlertType = Models.Enums.AlertTypeEnum.Above_Max_Value,
+                            AlertType = AlertTypeEnum.Above_Max_Value,
                             DeviceId = new Guid(message.DeviceId),
                             SensorId = this.dbContext.Sensors.First(s => s.Label == message.Sensor).Id,
                             TriggeringValue = message.Value.ToString(),
@@ -66,6 +65,7 @@ namespace IoTMon.DataServices
 
                         this.dbContext.Alerts.Add(newAlert);
                         this.dbContext.SaveChanges();
+                        Console.WriteLine($"     - !!! Alert {newAlert.AlertType} / {newAlert.TriggeringValue} !!!");
                         // send sms
                     }
                 }
@@ -77,6 +77,7 @@ namespace IoTMon.DataServices
                         lastAlert.AlertClosed = message.Time;
                         this.dbContext.Alerts.Update(lastAlert);
                         this.dbContext.SaveChanges();
+                        Console.WriteLine($"     - Alert {lastAlert.AlertType} closed w/ value {message.Value}");
                     }
                 }
             }
