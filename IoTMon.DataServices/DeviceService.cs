@@ -137,6 +137,7 @@ namespace IoTMon.DataServices
             }
 
             var target = this.dbContext.Devices
+                .Include(d => d.DeviceSensors)
                 .Include(d => d.User)
                 .Single(d => d.Id == device.Id);
 
@@ -145,6 +146,13 @@ namespace IoTMon.DataServices
                 target.IntervalInSeconds = device.IntervalInSeconds;
                 target.IsPublic = device.IsPublic;
                 target.IsActivated = device.IsActivated;
+
+                foreach (var s in device.Sensors)
+                {
+                    var deviceSensor = target.DeviceSensors.FirstOrDefault(ds => ds.SensorId == s.Id);
+                    deviceSensor.MinValue = s.MinValue;
+                    deviceSensor.MaxValue = s.MaxValue;
+                }
 
                 this.dbContext.Devices.Update(target);
                 this.dbContext.SaveChanges();

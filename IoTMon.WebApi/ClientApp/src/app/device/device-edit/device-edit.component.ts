@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Device } from 'src/app/models/device.model';
 import { DeviceService } from '../device.service';
 import { Subscription } from 'rxjs';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-device-edit',
@@ -15,6 +16,8 @@ export class DeviceEditComponent implements OnInit, OnDestroy {
   private device: Device;
   private httpSub: Subscription = new Subscription();
 
+  @ViewChild('f', {static: false}) form: any;
+
   constructor(private route: ActivatedRoute,
     private router: Router,
     private deviceService: DeviceService) { }
@@ -24,6 +27,7 @@ export class DeviceEditComponent implements OnInit, OnDestroy {
     const sub = this.deviceService.getDeviceById(this.deviceId)
       .subscribe((resp: Device) => {
         this.device = resp;
+        console.log("resp ", this.device);
       });
     this.httpSub.add(sub);
   }
@@ -37,6 +41,23 @@ export class DeviceEditComponent implements OnInit, OnDestroy {
         }, err => console.log(err));
 
       this.httpSub.add(sub);
+    }
+  }
+
+  isFormValid(): boolean {
+    if (this.form) {
+      const isValid = this.form.valid;
+      if (isValid) {
+        for (const sensor of this.device.sensors) {
+          if(sensor.minValue == undefined || sensor.maxValue == undefined){
+            continue;
+          }
+          if (sensor.minValue > sensor.maxValue) {
+            return false;
+          }
+        }
+      }
+      return isValid;
     }
   }
 

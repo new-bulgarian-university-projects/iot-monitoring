@@ -45,19 +45,30 @@
               Sensors
             </h4>
           </mat-grid-tile-header>
-          <mat-grid-list cols="2" rowHeight="50px">
+          <mat-grid-list cols="2" rowHeight="150px">
             <br>
-            <mat-grid-tile *ngFor=" let sensor of device.sensors">
+            <mat-grid-tile *ngFor=" let sensor of device.sensors; let i = index;">
               <mat-checkbox class="text-inside-grid" [checked]="true" [value]="sensor.id" [id]="sensor.id"
                 [disabled]="true" matTooltipPosition="right" [matTooltip]="sensor.description" matTooltipClass="tooltip"
                 name="{{sensor.id}}">
                 {{sensor.friendlyLabel}} - {{sensor.measurementUnit}}
               </mat-checkbox>
+              <mat-list-item class="limits">
+                <mat-form-field>
+                  <input [(ngModel)]="device.sensors[i].minValue" name="min-{{i}}" matInput type="number"
+                    placeholder="min">
+                </mat-form-field>
+                &nbsp;
+                <mat-form-field>
+                  <input [(ngModel)]="device.sensors[i].maxValue" name="max-{{i}}" matInput type="number"
+                    placeholder="max">
+                </mat-form-field>
+              </mat-list-item>
             </mat-grid-tile>
           </mat-grid-list>
         </div>
       </div>
-      <button type="submit" mat-raised-button color="primary">Save </button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!isFormValid()" >Save </button>
     </form>
     <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
   </mat-card-content>

@@ -6,4 +6,6 @@ export class Sensor {
     public measurementUnit: string;    
     public valueType: ValueType;
     public checked: boolean;
+    public minValue: number;
+    public maxValue: number;
 }

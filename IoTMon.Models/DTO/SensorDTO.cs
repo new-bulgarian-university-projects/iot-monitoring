@@ -1,6 +1,7 @@
 ﻿using IoTMon.Models.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace IoTMon.Models.DTO
@@ -24,6 +25,7 @@ namespace IoTMon.Models.DTO
             this.Description = sensor.Description;
             this.MeasurementUnit = sensor.MeasurementUnit;
             this.ValueType = sensor.ValueType;
+
         }
         public Guid Id { get; set; }
 
@@ -36,5 +38,8 @@ namespace IoTMon.Models.DTO
         public string MeasurementUnit { get; set; }
 
         public ValueTypeEnum ValueType { get; set; }
+
+        public double? MinValue { get; set; }
+        public double? MaxValue { get; set; }
     }
 }

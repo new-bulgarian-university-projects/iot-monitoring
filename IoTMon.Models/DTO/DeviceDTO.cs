@@ -21,9 +21,14 @@ namespace IoTMon.Models.DTO
             this.UserId = device.UserId;
             this.UserEmail = device.User?.Email;
 
-            this.Sensors = device.DeviceSensors
-                                 .Select(ds => new SensorDTO(ds.Sensor))
-                                 .ToList();
+            this.Sensors = new List<SensorDTO>();
+            foreach (var ds in device.DeviceSensors)
+            {
+                var sensor = new SensorDTO(ds.Sensor);
+                sensor.MinValue = ds.MinValue;
+                sensor.MaxValue = ds.MaxValue;
+                this.Sensors.Add(sensor);
+            }
         }
         public Guid Id { get; set; }
 
