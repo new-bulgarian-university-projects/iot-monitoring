@@ -57,6 +57,10 @@ namespace IoTMon.Data
                 .WithMany(u => u.Devices)
                 .IsRequired();
 
+            modelBuilder.Entity<DeviceSensor>()
+                .Property(ds => ds.IsNotificationOn)
+                .HasDefaultValue(false);
+
             // uniques
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)

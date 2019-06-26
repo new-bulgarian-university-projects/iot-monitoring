@@ -38,6 +38,11 @@ namespace IoTMon.DataServices
                 .FirstOrDefault(ds => ds.SensorId == sensorId &&
                                 ds.DeviceId == new Guid(message.DeviceId));
 
+            if(deviceSensor.IsNotificationOn == false)
+            {
+                return;
+            }
+
             double? min = deviceSensor?.MinValue;
             double? max = deviceSensor?.MaxValue;
 

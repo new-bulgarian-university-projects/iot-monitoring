@@ -14,5 +14,7 @@ namespace IoTMon.Models
 
         public double? MinValue { get; set; }
         public double? MaxValue { get; set; }
+
+        public bool IsNotificationOn { get; set; }
     }
 }
