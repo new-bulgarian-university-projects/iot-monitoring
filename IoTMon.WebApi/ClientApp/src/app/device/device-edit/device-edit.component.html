@@ -45,30 +45,43 @@
               Sensors
             </h4>
           </mat-grid-tile-header>
-          <mat-grid-list cols="2" rowHeight="150px">
-            <br>
-            <mat-grid-tile *ngFor=" let sensor of device.sensors; let i = index;">
-              <mat-checkbox class="text-inside-grid" [checked]="true" [value]="sensor.id" [id]="sensor.id"
-                [disabled]="true" matTooltipPosition="right" [matTooltip]="sensor.description" matTooltipClass="tooltip"
-                name="{{sensor.id}}">
-                {{sensor.friendlyLabel}} - {{sensor.measurementUnit}}
-              </mat-checkbox>
-              <mat-list-item class="limits">
-                <mat-form-field>
-                  <input [(ngModel)]="device.sensors[i].minValue" name="min-{{i}}" matInput type="number"
-                    placeholder="min">
-                </mat-form-field>
-                &nbsp;
-                <mat-form-field>
-                  <input [(ngModel)]="device.sensors[i].maxValue" name="max-{{i}}" matInput type="number"
-                    placeholder="max">
-                </mat-form-field>
-              </mat-list-item>
+          <mat-grid-list cols="2" rowHeight="200px">
+            <mat-grid-tile class="title-border" *ngFor="let sensor of device.sensors; let i=index;">
+              <div class="sensor-info container">
+                <div class="row">
+                  <mat-checkbox class="text-inside-grid" [checked]="true" [value]="sensor.id" [id]="sensor.id"
+                    [disabled]="true" matTooltipPosition="right" [matTooltip]="sensor.description"
+                    matTooltipClass="tooltip" name="{{sensor.id}}" colspan="1" rowspan="1">
+                    {{sensor.friendlyLabel}} - {{sensor.measurementUnit}}
+                  </mat-checkbox>
+                </div>
+                <div class="row">
+                  <mat-slide-toggle [(ngModel)]="sensor.isNotificationOn" name="isNotificationOn-{{i}}"
+                    matTooltip="Being notified by Email on alarm raised for thi sensor." matTooltipClass="tooltip">
+                    Email Notifications
+                  </mat-slide-toggle>
+                </div>
+                <div class="row">
+                  <mat-list-item class="limits">
+                    <mat-form-field>
+                      <input [(ngModel)]="device.sensors[i].minValue" name="min-{{i}}" matInput type="number"
+                        placeholder="min" matTooltip="Optional. Value under what you want to be raised an alarm."
+                        matTooltipClass="tooltip">
+                    </mat-form-field>
+                    &nbsp;
+                    <mat-form-field>
+                      <input [(ngModel)]="device.sensors[i].maxValue" name="max-{{i}}" matInput type="number"
+                        placeholder="max" matTooltip="Optional. Value above what you want to be raised an alarm."
+                        matTooltipClass="tooltip">
+                    </mat-form-field>
+                  </mat-list-item>
+                </div>
+              </div>
             </mat-grid-tile>
           </mat-grid-list>
         </div>
       </div>
-      <button type="submit" mat-raised-button color="primary" [disabled]="!isFormValid()" >Save </button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="!isFormValid()">Save </button>
     </form>
     <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
   </mat-card-content>

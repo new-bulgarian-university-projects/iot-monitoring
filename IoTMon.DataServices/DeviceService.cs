@@ -152,6 +152,7 @@ namespace IoTMon.DataServices
                     var deviceSensor = target.DeviceSensors.FirstOrDefault(ds => ds.SensorId == s.Id);
                     deviceSensor.MinValue = s.MinValue;
                     deviceSensor.MaxValue = s.MaxValue;
+                    deviceSensor.IsNotificationOn = s.IsNotificationOn;
                 }
 
                 this.dbContext.Devices.Update(target);

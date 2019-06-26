@@ -27,6 +27,8 @@ namespace IoTMon.Models.DTO
                 var sensor = new SensorDTO(ds.Sensor);
                 sensor.MinValue = ds.MinValue;
                 sensor.MaxValue = ds.MaxValue;
+                sensor.IsNotificationOn = ds.IsNotificationOn;
+
                 this.Sensors.Add(sensor);
             }
         }
