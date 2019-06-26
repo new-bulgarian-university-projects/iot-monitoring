@@ -86,12 +86,15 @@ namespace IoTMon.DataServices
                 UserId = userId
             };
 
-            foreach (var sensorId in device.SensorIds)
+            foreach (var sensor in device.Sensors)
             {
                 newDevice.DeviceSensors.Add(new DeviceSensor()
                 {
                     DeviceId = newDevice.Id,
-                    SensorId = new Guid(sensorId)
+                    SensorId = sensor.Id,
+                    MinValue = sensor.MinValue,
+                    MaxValue = sensor.MaxValue,
+                    IsNotificationOn = sensor.IsNotificationOn
                 });
             }
 

@@ -53,15 +53,15 @@ export class DeviceNewComponent implements OnInit, OnDestroy {
   }
 
   onChange() {
-    const sensorIds = this.availableSensors
+    const sensors: Sensor[] = this.availableSensors
       .filter(s => s.checked)
-      .map(s => s.id);
+      .map(s => s);
 
-    this.device.sensorIds = sensorIds;
+    this.device.sensors = sensors;
   }
 
   isFormValid(): boolean {
-    const isValid = this.form.valid && this.device.sensorIds.length > 0;
+    const isValid = this.form.valid && this.device.sensors.length > 0;
     return isValid;
   }
 

@@ -22,14 +22,18 @@
     <ng-container matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
         <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-
-
           <mat-action-list>
             <span class="example-element-description-attribution"> Sensors </span>
             <button *ngFor="let sensor of element.sensors" mat-list-item
               [routerLink]="['/chart','device', element.id, 'sensor', sensor.label]">
               <mat-icon color="primary">{{deviceService.getIcon(sensor.label)}}</mat-icon>
               &nbsp; {{sensor.friendlyLabel}}
+              &nbsp;
+              <span *ngIf="sensor.isNotificationOn">
+                <mat-icon matTooltip="This sensor has Email Notifications enabled." matTooltipClass="tooltip">
+                  rss_feed
+                </mat-icon>
+              </span>
             </button>
           </mat-action-list>
           <span class="fill-remaining-space"></span>
@@ -40,8 +44,6 @@
               <button mat-raised-button color="warn" (click)="onDelete(element)">Delete</button>
             </div>
           </mat-action-list>
-
-
         </div>
       </td>
     </ng-container>
@@ -54,4 +56,5 @@
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
   </table>
 </div>
-<button *ngIf="authService.isAuthenticated()" mat-raised-button color="accent" class="element-offset" [routerLink]="['/devices','new']">New Device</button>
+<button *ngIf="authService.isAuthenticated()" mat-raised-button color="accent" class="element-offset"
+  [routerLink]="['/devices','new']">New Device</button>
