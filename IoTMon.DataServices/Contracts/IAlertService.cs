@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IoTMon.DataServices.Contracts
 {
-    public interface IAlertService
+    public interface IAlertService : IDisposable
     {
-        void CheckAlerts(Message message);
+        Task CheckAlerts(Message message);
     }
 }

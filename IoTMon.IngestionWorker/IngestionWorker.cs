@@ -61,9 +61,9 @@ namespace IoTMon.IngestionWorker
 
                     using (var dbContext = new ApplicationDbContext(dbOptions.Options))
                     {
-                        var alertService = new AlertService(dbContext);
+                        var alertService = new AlertService(dbContext, serviceProvider.GetService<IAlertNotifier>());
                         // check alerts
-                        alertService.CheckAlerts(message);
+                        await alertService.CheckAlerts(message);
 
                     }
                     channel.BasicAck(ea.DeliveryTag, false);
@@ -113,6 +113,7 @@ namespace IoTMon.IngestionWorker
             dbOptions.UseSqlServer(Configuration.GetConnectionString("IoTMonitoring"));
 
             services.AddDataServices(configuration);
+            services.AddServices(configuration);
             services.AddSingleton<ISimulatorHelpers, SimulatorHelper>();
 
             rabbitMQConfig = Configuration.GetSection("RabbitMQ").Get<RabbitMQConfig>();
