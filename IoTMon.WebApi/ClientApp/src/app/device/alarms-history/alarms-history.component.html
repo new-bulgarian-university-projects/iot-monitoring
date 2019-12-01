@@ -1,0 +1,39 @@
+<h3 *ngIf="dataSource && dataSource.data.length === 0">No Alerts History</h3>
+<h3 *ngIf="dataSource && dataSource.data.length">Alerts History</h3>
+<mat-chip-list aria-orientation="vertical">
+  <mat-chip *ngIf="minValue" [ngStyle]="{'background-color': 'blue'}"><span [ngStyle]="{'color': 'white'}">Min: {{minValue}}</span></mat-chip>
+  <mat-chip *ngIf="maxValue" [ngStyle]="{'background-color': 'red'}"> <span [ngStyle]="{'color': 'white'}">Max: {{maxValue}}</span></mat-chip>
+</mat-chip-list>
+<div class="full-width">
+  <table *ngIf="dataSource && dataSource.data.length" class="full-width" mat-table mat-sort [dataSource]="dataSource">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef> Value </th>
+      <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="alertType">
+      <th mat-header-cell *matHeaderCellDef> Alert Type </th>
+      <td mat-cell *matCellDef="let element"> {{parseEnum(element.alertType)}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="started">
+      <th mat-header-cell *matHeaderCellDef> Alarm Started </th>
+      <td mat-cell *matCellDef="let element"> {{element.started | date: 'dd MMM., yyyy, HH:mm:ss'  }} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="closed">
+      <th mat-header-cell *matHeaderCellDef> Alarm Closed </th>
+      <td mat-cell *matCellDef="let element"> {{element.closed | date: 'dd MMM., yyyy, HH:mm:ss'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

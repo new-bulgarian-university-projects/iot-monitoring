@@ -20,11 +20,14 @@ namespace IoTMon.WebApi.Controllers
     {
         private readonly ITimeSeriesProvider influxDb;
         private readonly IDeviceService deviceService;
+        private readonly IAlertService alertService;
         private readonly IDataParser dataParser;
 
-        public DevicesController(ITimeSeriesProvider influxDb, IDeviceService deviceService, IDataParser dataParser)
+        public DevicesController(ITimeSeriesProvider influxDb, IDeviceService deviceService,
+            IAlertService alertService, IDataParser dataParser)
         {
             this.influxDb = influxDb ?? throw new ArgumentNullException(nameof(influxDb));
+            this.alertService = alertService ?? throw new ArgumentNullException(nameof(alertService));
             this.deviceService = deviceService ?? throw new ArgumentNullException(nameof(deviceService));
             this.dataParser = dataParser ?? throw new ArgumentNullException(nameof(dataParser));
         }
@@ -73,6 +76,26 @@ namespace IoTMon.WebApi.Controllers
                 return this.StatusCode(500, "Server error while getting device with ID " + deviceId);
             }
 
+        }
+
+        [HttpGet("{deviceId:guid}/sensors/{sensorName}/alerts-history")]
+        public async Task<ActionResult> GetAlertHistory(Guid deviceId, string sensorName)
+        {
+            try
+            {
+                var device = this.deviceService.GetDeviceById(deviceId);
+                var userId = GetClaim(this.User, "id");
+                if (!device.IsPublic && device.UserId.ToString() != userId)
+                {
+                    return Unauthorized("This private device is not your belonging !");
+                }
+                var alerts = await this.alertService.GetAlerts(deviceId, sensorName);
+                return this.Ok(alerts);
+            }
+            catch (Exception)
+            {
+                return this.StatusCode(500, "Server Error on getting Alerts History for device with ID " + deviceId);
+            }
         }
 
         [Authorize]

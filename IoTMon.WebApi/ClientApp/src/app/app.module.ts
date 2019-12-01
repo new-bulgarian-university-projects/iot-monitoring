@@ -15,6 +15,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { AuthModule } from './auth/auth.module';
 import { FormsModule } from '@angular/forms';
 import { UserComponent } from './user/user.component';
+import { AlarmsHistoryComponent } from './device/alarms-history/alarms-history.component';
 
 export function tokenGetter() {
   return localStorage.getItem(AppConstants.jwtKey);
@@ -25,6 +26,7 @@ export function tokenGetter() {
     AppComponent,
     NavbarComponent,
     ChartComponent,
+    AlarmsHistoryComponent,
     UserComponent,
   ],
   imports: [
