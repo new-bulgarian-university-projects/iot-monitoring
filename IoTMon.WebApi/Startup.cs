@@ -35,6 +35,10 @@ namespace IoTMon.WebApi
         {
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "IoT Monitoring API docs", Version = "v1" });
+            });
 
             var authParams = Configuration.GetSection("Jwt").Get<AuthParameters>();
 
@@ -73,6 +77,12 @@ namespace IoTMon.WebApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseCors(options =>
             {

@@ -28,7 +28,7 @@ namespace IoTMon.DataServices
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.alertNotifier = alertNotifier ?? throw new ArgumentNullException(nameof(alertNotifier));
         }
-        public class Test
+        public class SensorDeviceTemp
         {
             public Guid SensorId { get; set; }
             public Guid DeviceId { get; set; }
@@ -40,13 +40,12 @@ namespace IoTMon.DataServices
         }
         public async Task<AlertRecordDTO> GetAlerts(Guid deviceId, string sensorName)
         {
-            Test sdInfo = new Test();
+            SensorDeviceTemp sdInfo = new SensorDeviceTemp();
             var deviceIdParam = new SqlParameter("@deviceId", deviceId);
             var sensorIdParam = new SqlParameter("@sensorName", sensorName);
             var sql = @"
 DECLARE @sensorId nvarchar(100);
 SET @sensorId = (SELECT Id FROM Sensors WHERE Label = @sensorName);
-PRINT @sensorId
 
 SELECT s.Id as SensorId, d.Id as DeviceId, d.DeviceName, s.FriendlyLabel as SensorName, 
 		ds.MinValue as MinValue, ds.MaxValue as MaxValue
@@ -61,7 +60,6 @@ SELECT a.TriggeringValue as Value, a.AlertType, a.AlertStarted as Started, a.Ale
 FROM Alerts a
 WHERE (a.DeviceId = @deviceId AND a.SensorId = @sensorId)
 ORDER BY a.AlertStarted DESC
-
 ";
 
             var alertsHistory = new List<AlertHistoryDTO>();
@@ -108,7 +106,6 @@ ORDER BY a.AlertStarted DESC
                 }
             }
 
-
             var res = new AlertRecordDTO
             {
                 DeviceId = sdInfo.DeviceId,
@@ -120,7 +117,6 @@ ORDER BY a.AlertStarted DESC
             };
 
             return res;
-
         }
 
         public async Task CheckAlerts(Message message)
@@ -189,7 +185,6 @@ ORDER BY a.AlertStarted DESC
 
                         await this.alertNotifier.Execute(emailProps);
                         Console.WriteLine($" == Email sent to {emailProps.ReceiverEmail}");
-
                     }
                 }
                 else
